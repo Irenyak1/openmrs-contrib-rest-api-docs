@@ -1,0 +1,182 @@
+<h1 id='person-attribute-type'>Person Attribute Type</h1><h2 id='person-attribute-type-overview'>Person Attribute Type Overview</h2>
+<ul>
+<li><p>Person attributes provide a mechanism for implementations to add custom attributes to their person records. A Person Attribute Type defines one of these custom attributes, including its data type and search behavior.</p></li>
+<li><p>For example, creating a Person Attribute Type for civil status (whether or not someone is single or married) would allow an implementation to record this information for each person in their system.</p></li>
+</ul>
+<h2 id='available-operations'>Available operations.</h2>
+<ol>
+<li><a href="#list-person-attribute-types">List person attribute types</a></li>
+<li><a href="#create-a-person-attribute-type">Create a person attribute type</a></li>
+<li><a href="#update-a-person-attribute-type">Update a person attribute type</a></li>
+<li><a href="#delete-a-person-attribute-type">Delete a person attribute type</a></li>
+</ol>
+<h2 id='list-person-attribute-types'>List person attribute types</h2>
+<ul>
+<li><h3 id='list-all-non-retired-person-attribute-types'>List all non-retired person attribute types.</h3>
+<p>Quickly filter person attribute types with a given search query. If the request is not authenticated or the authenticated user does not have appropriate permissions, a 401 Unauthorized status is returned.</p>
+<h4 id='query-parameters'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Query to filter person attributes by its name(partial search is not supported)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /personattributetype?q=race
+</code></pre>
+<ul>
+<li><h3 id='get-person-attribute-type-by-uuid'>Get person attribute type by UUID.</h3>
+<p>Retrieve a person attribute type by its UUID. Returns a <code>404 Not Found</code> status if the person attribute type not exists. If the
+user not logged in to  perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /personattributetype/:target_person_attribute_type_uuid
+</code></pre><h2 id='create-a-person-attribute-type'>Create a person attribute type</h2>
+<ul>
+<li><p>To Create a person attribute type you need to specify below attributes in the request body.If the user not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the person attribute type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description (Required)</td>
+</tr>
+<tr>
+<td><em>format</em></td>
+<td><code>Java Class</code></td>
+<td>the Java class the PersonAttributeType</td>
+</tr>
+<tr>
+<td><em>foreignKey</em></td>
+<td><code>Number</code></td>
+<td>the internal identifier (foreign key) to a Concept that defines the possible values for this attribute</td>
+</tr>
+<tr>
+<td><em>sortWeight</em></td>
+<td><code>Number</code></td>
+<td>the order this PersonAttributeType will appear in when searched</td>
+</tr>
+<tr>
+<td><em>searchable</em></td>
+<td><code>Boolean</code></td>
+<td>true if this person attributes should be used to find patients. The default is false</td>
+</tr>
+<tr>
+<td><em>editPrivilege</em></td>
+<td><code>JSON Object</code></td>
+<td>the privilege required to make changes to this type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /personattributetype
+{
+    "name": "Edit Civil Status",
+    "description": "Able to manage the civil status of persons",
+    "format": "org.openmrs.Concept",
+    "foreignKey": 1054,
+    "searchable": false,
+    "editPrivilege": {
+        "name": "Super User",
+        "description": "Change and update the person attribute type"
+    }
+}
+</code></pre><h2 id='update-a-person-attribute-type'>Update a person attribute type</h2>
+<ul>
+<li><p>Update a target person attribute type with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code>
+status if the person attribute not exists. If the user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the person attribute type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description (Required)</td>
+</tr>
+<tr>
+<td><em>format</em></td>
+<td><code>Java Class</code></td>
+<td>the Java class the PersonAttributeType</td>
+</tr>
+<tr>
+<td><em>foreignKey</em></td>
+<td><code>Number</code></td>
+<td>the internal identifier (foreign key) to a Concept that defines the possible values for this attribute</td>
+</tr>
+<tr>
+<td><em>sortWeight</em></td>
+<td><code>Number</code></td>
+<td>the order this PersonAttributeType will appear in when searched</td>
+</tr>
+<tr>
+<td><em>searchable</em></td>
+<td><code>Boolean</code></td>
+<td>true if this person attributes should be used to find patients. The default is false</td>
+</tr>
+<tr>
+<td><em>editPrivilege</em></td>
+<td><code>JSON Object</code></td>
+<td>the privilege required to make changes to this type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /personattributetype
+{
+    "name": "Edit Civil Status",
+    "description": "Able to manage the civil status of persons",
+    "format": "org.openmrs.Concept",
+    "foreignKey": 1054,
+    "searchable": true,
+    "editPrivilege": {
+        "name": "Super User",
+        "description": "Change and update the person attribute type"
+    }
+}
+</code></pre><h2 id='delete-a-person-attribute-type'>Delete a person attribute type</h2>
+<ul>
+<li><p>Delete or Retire a person attribute type by its UUID. Returns a <code>404 Not Found</code> status if the person attribute type not
+exists. If the user not logged in to  perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be retired unless purge = ‘true’.Purging will attempt to irreversibly remove the attribute type from the system. Attribute types that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /personattributetype/:target_person_attribute_type_uuid?purge=true
+</code></pre>

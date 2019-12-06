@@ -1,0 +1,124 @@
+<h1 id='role'>Role</h1><h2 id='role-overview'>Role Overview</h2>
+<p>A <strong>Role</strong> represents a group of privileges in the system. Roles may inherit privileges from other roles, and users may have one or more roles.</p>
+<h2 id='available-operations-for-role'>Available operations for Role.</h2>
+<ol>
+<li><a href="#list-roles">List roles</a></li>
+<li><a href="#create-a-role">Create a role</a></li>
+<li><a href="#update-a-role">Update a role</a></li>
+<li><a href="#delete-a-role">Delete a role</a></li>
+</ol>
+<h2 id='list-roles'>List roles</h2>
+<ul>
+<li>Fetch all the roles that match any specified parameters otherwise fetch all roles. Returns a <code>200 OK</code> status with the role response. If the user not logged in to  perform this action, a <code>401 Unauthorized</code> status returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /role
+</code></pre>
+<ul>
+<li><h2 id='get-a-role-by-uuid'>Get a role by UUID.</h2>
+<p>Retrieve a role by its UUID. Returns a <code>404 Not Found</code> status if the role not exists. If the
+user not logged in to  perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /role/:target_role_uuid
+</code></pre><h2 id='create-a-role'>Create a role</h2>
+<ul>
+<li><p>To create a role you need to specify below attributes in the request body.If the user not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the role (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description of the role (Required)</td>
+</tr>
+<tr>
+<td><em>privileges</em></td>
+<td><code>Array[] : privileges</code></td>
+<td>An array of the privilege resource</td>
+</tr>
+<tr>
+<td><em>inheritedRoles</em></td>
+<td><code>Array[] : inheritedRoles</code></td>
+<td>An array of the inheritedRoles type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /role
+{
+  "name": "Clinician",
+  "description": "A provider assisting the Lead Surgeon.",
+  "privileges": [{
+      "name": "Delete Patients",
+      "description": "Able to delete patients"
+  }]
+}
+</code></pre><h2 id='update-a-role'>Update a role</h2>
+<ul>
+<li><p>Update a role with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code>
+status if the role deos not exists. If the user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the role (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description of the role (Required)</td>
+</tr>
+<tr>
+<td><em>privileges</em></td>
+<td><code>Array[] : privileges</code></td>
+<td>An array of the privilege resource</td>
+</tr>
+<tr>
+<td><em>inheritedRoles</em></td>
+<td><code>Array[] : inheritedRoles</code></td>
+<td>An array of the inheritedRoles type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /role
+{
+  "name": "Configures Forms",
+  "description": "Manages forms and attaches them to the UI"
+}
+</code></pre><h2 id='delete-a-role'>Delete a role</h2>
+<ul>
+<li><p>Delete a role by its UUID. Returns a <code>404 Not Found</code> status if the role not
+exists. If the user not logged in to  perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>must be <code>true</code> to delete the role from the system; if <code>false</code>, the request will have no effect</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /role/:target_role_uuid?purge=true
+</code></pre>

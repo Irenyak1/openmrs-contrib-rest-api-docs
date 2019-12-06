@@ -1,0 +1,58 @@
+<h1 id='concept-data-type'>Concept Data Type</h1><h2 id='concept-data-type-overview'>Concept Data Type Overview</h2>
+<ul>
+<li><p>Concept Data type defines the structured format you desired the data to be represented as.</p></li>
+<li><p>The current types are as follows:</p></li>
+</ul>
+
+<p>1. Numeric – any data represented numerically, also allows you to classify critical values and units, e.g. age, height, and liters consumed per day
+    2. Coded – allows answers to be only those provided, e.g. blood type can only be “A”, “B”, &quot;AB&quot;, or “O”
+    3. Text – Open ended responses
+    4. N/A – the standard datatype for any non-query-like concepts (answers or things), e.g. symptoms, diagnoses, findings, anatomy, misc
+    5. Document 
+    6. Date – structured day, month, and year
+    7. Time – structured time response
+    8. DateTime – structured response including both the date and the time
+    9. Boolean – checkbox response, e.g. yes or no queries
+    10. Rule 
+    11. Structured </p>
+<h2 id='available-operations-for-concept-data-type'>Available operations for Concept Data Type.</h2>
+<ol>
+<li><a href="#list-concept-data-types">List concept_data types</a></li>
+<li><a href="#delete-a-concept_data-type">Delete a concept_data type</a></li>
+</ol>
+<h2 id='list-concept-data-types'>List concept data types</h2>
+<ul>
+<li><h3 id='list-all-non-retired-concept-data-types'>List all non-retired concept data types.</h3>
+<p>Get concept data types.Returns a <code>404 Not Found</code> status if concept data type not exists. 
+If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned. </p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /conceptdatatype"
+</code></pre>
+<ul>
+<li><h3 id='get-concept-data-type-by-uuid'>Get concept data type by UUID.</h3>
+<p>Retrieve a concept data type by its UUID. Returns a <code>404 Not Found</code> status if concept data type not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /conceptdatatype/:target_concept_data_type_uuid
+</code></pre><h2 id='delete-a-concept-data-type'>Delete a concept data type</h2>
+<ul>
+<li><p>Delete or retire a target concept data type by its UUID. Returns a <code>404 Not Found</code> 
+status if concept data not exists. If user not logged in to perform this action, 
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /conceptdatatype/:target_concept_data_type_uuid?purge=true
+</code></pre>

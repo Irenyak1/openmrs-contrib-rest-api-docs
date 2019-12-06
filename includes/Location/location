@@ -1,0 +1,406 @@
+<h1 id='location'>Location</h1><h2 id='location-overview'>Location Overview</h2>
+<ul>
+<li><p>A Location is a physical place where a patient may be seen, such as a hospital, a room, a clinic, or a district.</p></li>
+<li><p><strong>Locations may have a hierarchy</strong>,such that each location may have one parent location.</p></li>
+<li><p>Also a Location can have one or more Children location example Children&#39;s Ward might be a location within the location 
+Amani Clinic.</p></li>
+<li><p>You might also store physical areas (for example Eastern Province, or California) as Locations. </p></li>
+<li><p>You should not use locations to represent logical ideas like All District Hospitals they should be modeled using LocationTags.</p></li>
+</ul>
+<h2 id='location-sub-resource-types'>Location Sub Resource types</h2><h3 id='location-attribute'>Location Attribute.</h3>
+<ul>
+<li><p>If you wish to record extra information about location, you can create Location Attributes and assign them to Location Types.</p></li>
+<li><p>Location attributes exists specifically to allow implementations to extend the data model.</p></li>
+</ul>
+<h2 id='available-operations-for-location'>Available operations for Location</h2>
+<ol>
+<li><a href="#list-location">List location</a></li>
+<li><a href="#create-a-location">Create a location</a></li>
+<li><a href="#update-a-location">Update a location</a></li>
+<li><a href="#delete-a-location">Delete a location</a></li>
+<li><a href="#list-location-attribute-sub-resources">List location attribute sub resource</a></li>
+<li><a href="#create-a-location-attribute-sub-resource-with-properties">Create location attribute sub resource with properties</a></li>
+<li><a href="#update-a-location-attribute-sub-resource">Update location attribute sub resource</a></li>
+<li><a href="#delete-a-location-attribute-sub-resource">Delete location attribute sub resource</a></li>
+</ol>
+<h2 id='list-location'>List location</h2>
+<ul>
+<li><h3 id='list-all-non-retired-locations'>List all non-retired locations`.</h3>
+<p>Quickly filter location with given query parameters.Returns a <code>404 Not Found</code> status if the location not exists. If the 
+user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Display Name of Location object.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /location?
+q="amani"
+</code></pre>
+<ul>
+<li><h3 id='list-location-by-uuid'>List location by UUID.</h3>
+<p>Retrieve a location by its UUID. Returns a <code>404 Not Found</code> status if the location not exists. If the user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /location/:target_location_uuid
+</code></pre><h2 id='create-a-location'>Create a location</h2>
+<ul>
+<li><p>To Create a location you need to specify below attributes in the request body.If the user not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the location (Required)</td>
+</tr>
+<tr>
+<td><em>address1</em></td>
+<td><code>String</code></td>
+<td>Address of the location (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description</td>
+</tr>
+<tr>
+<td><em>cityVillage</em></td>
+<td><code>String</code></td>
+<td>City/village</td>
+</tr>
+<tr>
+<td><em>stateProvince</em></td>
+<td><code>String</code></td>
+<td>State and province</td>
+</tr>
+<tr>
+<td><em>country</em></td>
+<td><code>String</code></td>
+<td>Country</td>
+</tr>
+<tr>
+<td><em>postalCode</em></td>
+<td><code>String</code></td>
+<td>Postal code of the location</td>
+</tr>
+<tr>
+<td><em>latitude</em></td>
+<td><code>String</code></td>
+<td>Latitude</td>
+</tr>
+<tr>
+<td><em>longitude</em></td>
+<td><code>String</code></td>
+<td>Longitude</td>
+</tr>
+<tr>
+<td><em>countyDistrict</em></td>
+<td><code>String</code></td>
+<td>District or Country</td>
+</tr>
+<tr>
+<td><em>tags</em></td>
+<td><code>Array[]: LocationTag UUID</code></td>
+<td>UUID&#39;s of the location tags</td>
+</tr>
+<tr>
+<td><em>parentLocation</em></td>
+<td><code>Parent Location UUID</code></td>
+<td>UUID of the target parent location</td>
+</tr>
+<tr>
+<td><em>childLocations</em></td>
+<td><code>Array[]: Child Location UUID</code></td>
+<td>UUID&#39;s of the target child locations</td>
+</tr>
+<tr>
+<td><em>attributes</em></td>
+<td><code>Array[]: Attribute UUID</code></td>
+<td>UUID&#39;s of location attributes</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /location
+{
+    "name": "Salzburg Hospital",
+    "description": "Salzburg hospital location",
+    "address1": "Mullner House 48",
+    "address2": "",
+    "cityVillage": "salzburg",
+    "stateProvince": "salzburg",
+    "country": "Austria",
+    "postalCode": "5020",
+    "latitude": "",
+    "longitude": "",
+    "countyDistrict": "salzburg",
+    "tags": [
+    "target_location_tag_uuid"
+    ],
+    "parentLocation": "target_parent_location_uuid",
+    "childLocations": [
+    "target_child_location_uuid"
+    ],
+    "attributes": [
+        {
+            "attributeType": "target_attributeType_uuid",
+            "value": "value_for_attribute"
+        }
+    ]
+}
+</code></pre><h2 id='update-a-location'>Update a location</h2>
+<ul>
+<li><p>Update a target location with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if the location not exists. If the user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>uuid</em></td>
+<td><code>target_location_uuid</code></td>
+<td>Target location resource UUID</td>
+</tr>
+</tbody></table>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the location (Required)</td>
+</tr>
+<tr>
+<td><em>address1</em></td>
+<td><code>String</code></td>
+<td>Address of the location (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description</td>
+</tr>
+<tr>
+<td><em>cityVillage</em></td>
+<td><code>String</code></td>
+<td>City/village</td>
+</tr>
+<tr>
+<td><em>stateProvince</em></td>
+<td><code>String</code></td>
+<td>State and province</td>
+</tr>
+<tr>
+<td><em>country</em></td>
+<td><code>String</code></td>
+<td>Country</td>
+</tr>
+<tr>
+<td><em>postalCode</em></td>
+<td><code>String</code></td>
+<td>Postal code of the location</td>
+</tr>
+<tr>
+<td><em>latitude</em></td>
+<td><code>String</code></td>
+<td>Latitude</td>
+</tr>
+<tr>
+<td><em>longitude</em></td>
+<td><code>String</code></td>
+<td>Longitude</td>
+</tr>
+<tr>
+<td><em>countyDistrict</em></td>
+<td><code>String</code></td>
+<td>District or Country</td>
+</tr>
+<tr>
+<td><em>tags</em></td>
+<td><code>Array[]: LocationTag UUID</code></td>
+<td>UUID&#39;s of the location tags</td>
+</tr>
+<tr>
+<td><em>parentLocation</em></td>
+<td><code>Parent Location UUID</code></td>
+<td>UUID of the target parent location</td>
+</tr>
+<tr>
+<td><em>childLocations</em></td>
+<td><code>Array[]: Child Location UUID</code></td>
+<td>UUID&#39;s of the target child locations</td>
+</tr>
+<tr>
+<td><em>attributes</em></td>
+<td><code>Array[]: Attribute UUID</code></td>
+<td>UUID&#39;s of location attributes</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /location/:target_location_uuid
+{
+    "name": "Salzburg Hospital",
+    "description": "Modified location of Salzburg hospital location",
+    "address1": "Mullner House 48",
+    "address2": "",
+    "cityVillage": "salzburg",
+    "stateProvince": "salzburg",
+    "country": "Austria",
+    "postalCode": "5020",
+    "latitude": "47.811195",
+    "longitude": "13.03322",
+    "countyDistrict": "salzburg",
+    "tags": [
+    "target_location_tag_uuid"
+    ],
+    "parentLocation": "target_parent_location_uuid",
+    "childLocations": [
+    "target_child_location_uuid"
+    ],
+    "attributes": [
+        {
+            "attributeType": "target_attributeType_uuid",
+            "value": "value_for_attribute"
+        }
+    ]
+}       
+</code></pre><h2 id='delete-a-location'>Delete a location</h2>
+<ul>
+<li><p>Delete or Retire a target location by its UUID. Returns a <code>404 Not Found</code> status if the location not exists.If the user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-3'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /location/:target_location_uuid?purge=true
+</code></pre><h2 id='list-location-attribute-sub-resources'>List location attribute sub resources</h2>
+<ul>
+<li><h3 id='list-all-location-attribute-sub-resources-for-a-location'>List all location attribute sub resources for a location.</h3>
+<p>Retrieve all <b>attribute</b> sub resources of a  <b>location</b> resource by target_location_uuid.Returns a 
+<code>404 Not Found</code> status if the attribute not exists. If the user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /location/:target_location_uuid/attribute 
+</code></pre>
+<ul>
+<li><h3 id='list-location-attribute-sub-resources-by-own-uuid-and-parent-location-uuid'>List location attribute sub resources by own UUID and parent location UUID.</h3>
+<p>Retrieve an <b>attribute</b> sub resources of a <b>location</b> resource.Returns a 
+ <code>404 Not Found</code> status if the attribute not exists. If the user are not logged in to perform this action, a <code>401 Unauthorized</code> status
+ returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /location/:target_location_uuid/attribute/:target_attribute_uuid
+</code></pre><h2 id='create-a-location-attribute-sub-resource-with-properties'>Create a location attribute sub resource with properties</h2>
+<ul>
+<li><p>To Create an attribute sub resource for a specific location resource you need to specify below attributes in the request body.
+If the user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-3'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>Attribute_Type UUID</code></td>
+<td>Create Attribute from this Location Attribute_Type</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>Depends on Attribute_Type Selected</code></td>
+<td>Value for the attribute</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST location/:target_location_uuid/attribute 
+{
+    "attributeType": "target_location_attribute_type_uuid",
+    "value": "value_for_the_attriute"
+}
+</code></pre><h2 id='update-a-location-attribute-sub-resource'>Update a location attribute sub resource</h2>
+<ul>
+<li><p>Updates a location attribute sub resource value with given uuid, this method will only modify value of the sub resource.Returns 
+a <code>404 Not Found</code> status if the attribute not exists.If the user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='attributes-4'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>Attribute_Type UUID</code></td>
+<td>Location Attribute_Type resource UUID</td>
+</tr>
+<tr>
+<td><em>updated value</em></td>
+<td><code>Depends on Attribute_Type Selected</code></td>
+<td>Updated value for the attribute</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST location/:target_location_uuid/attribute/:target_location_attribute_uuid
+{
+    "attributeType": "target_attribute_type_uuid",
+    "value": "modified_attriute_value"
+} 
+</code></pre><h2 id='delete-a-location-attribute-sub-resource'>Delete a location attribute sub resource</h2>
+<ul>
+<li><p>Delete or Retire a target location attribute sub resource by its UUID.Returns a <code>404 Not Found</code> status if the attribute not exists. 
+If the user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-4'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /location/:target_location_uuid/attribute/:target_location_attribute_uuid
+</code></pre>

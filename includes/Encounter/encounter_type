@@ -1,0 +1,122 @@
+<h1 id='encounter-type'>Encounter Type</h1><h2 id='encounter-type-overview'>Encounter Type Overview</h2>
+<ul>
+<li><p>Encounters represent an interaction between the patient and healthcare system. Since there are a wide variety of ways in
+which these interactions may occur, OpenMRS allows you categorize them by defining different types of encounter. For example, 
+&quot;Adult Primary Care Initial Visit&quot; and &quot;In-Between Visit Documentation&quot; could be different types of encounters.</p></li>
+<li><p>You could define encounter type for locations such as Pharmacy, Lab, Consultation room or for actions such as admission or discharge.</p></li>
+</ul>
+<h2 id='available-operations-for-encounter-type'>Available operations for Encounter Type</h2>
+<ol>
+<li><a href="#list-encounter-types">List encounter types</a></li>
+<li><a href="#create-a-encounter-type">Create an encounter type</a></li>
+<li><a href="#update-a-encounters-type">Update an encounter type</a></li>
+<li><a href="#delete-a-encounters-type">Delete an encounter type</a></li>
+</ol>
+<h2 id='list-encounter-types'>List encounter types</h2>
+<ul>
+<li><h3 id='list-all-not-retired-encounter-types'>List all  not-retired encounter types.</h3>
+<p>Quickly filter encounter types with given query parameters.Returns a <code>404 Not Found</code> status if encounter types not exists. 
+If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h5 id='query-parameters'>Query Parameters</h5>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Query to filter encounter type by its name</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /encountertype?
+    q=Admission
+</code></pre>
+<ul>
+<li><h3 id='get-encounter-type-by-uuid'>Get encounter type by UUID.</h3>
+<p>Retrieve an encounter type by its UUID. Returns a <code>404 Not Found</code> status if encounter type not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /encountertype/:target_encounter_type_uuid
+</code></pre><h2 id='create-an-encounter-type'>Create an encounter type</h2>
+<ul>
+<li><p>To Create an encounter type you need to specify below attributes in the request body. If you are not logged in to perform 
+this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the encounter type (required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description for the encounter type (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /encountertype
+{
+    "name": "Discharge",
+    "description": "Attach encounters related to hospital dischargers"
+}
+</code></pre><h2 id='update-an-encounter-type'>Update an encounter type</h2>
+<ul>
+<li><p>Update a target encounter type with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if encounter type not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the encounter type</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description for the encounter type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /encountertype/:target_encounter_type_uuid
+{
+    "name": "Discharge",
+    "description": "Encounters related to hospital dischargers"
+}
+</code></pre><h2 id='delete-an-encounter-type'>Delete an encounter type</h2>
+<ul>
+<li><p>Delete or retire a target encounter type by its UUID. Returns a <code>404 Not Found</code> status if encounter type not exists.If user 
+not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /encountertype/:target_encounter_type_uuid?purge=true
+</code></pre>

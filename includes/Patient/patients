@@ -1,0 +1,478 @@
+<h1 id='patients'>Patients</h1><h2 id='patients-overview'>Patients Overview</h2>
+<ul>
+<li><p>Anyone who receives care in OpenMRS must be a <strong>Patient</strong>.</p></li>
+<li><p>Every Patient must have atleast one Identifier, which is explained below. (for example,
+Anyone who has an Encounter or who is enrolled in a Program is a Patient.)</p></li>
+<li><p>A Patient is also a Person, meaning they must have at least one name and they may have addresses.</p></li>
+</ul>
+<h2 id='sub-resource-types-of-patient'>Sub resource types of Patient</h2><h3 id='patientidentifier-identifier'>PatientIdentifier (Identifier)</h3>
+<ul>
+<li>A PatientIdentifier is a medical record number assigned by your facility, used to identify and re-identify the patient on subsequent visits.</li>
+</ul>
+<h3 id='allergy'>Allergy</h3>
+<ul>
+<li>OpenMRS lets you manually maintain an <strong>Allergy List</strong> for a patient, including the allergen, reaction, severity, etc.</li>
+</ul>
+<h2 id='available-operations-for-patients'>Available operations for Patients</h2>
+<ol>
+<li> <a href="#search-patients">List Patients</a></li>
+<li> <a href="#create-a-patient">Create a patient record</a></li>
+<li> <a href="#update-a-patient">Update a patient record</a></li>
+<li> <a href="#delete-a-patient">Delete a patient record</a></li>
+<li> <a href="#list-patientIdentifier-sub-resources">List patientIdentifier sub resource</a></li>
+<li> <a href="#create-a-patientIdentifier-sub-resource-with-properties">Create patientIdentifier sub resource with properties</a></li>
+<li> <a href="#update-patientidentifier-sub-resource-with-properties">Update patientIdentifier sub resource</a></li>
+<li> <a href="#delete-patientidentifier-sub-resource-with-properties">Delete patientIdentifier sub resource</a></li>
+<li> <a href="#list-allergy-sub-resources">List allergy sub resource</a></li>
+<li><a href="#">Create allergy sub resource with properties</a></li>
+<li><a href="#update-allergy-sub-resource-with-properties">Update allergy sub resource</a></li>
+<li><a href="#delete-allergy-sub-resource-with-properties">Delete allergy sub resource</a></li>
+</ol>
+<h2 id='search-patients'>Search patients</h2>
+<ul>
+<li><h3 id='search-patients-2'>Search patients</h3>
+<p>Fetch all non-retired patients that match any specified parameters otherwise fetch all non-retired patients. Returns a <code>200 OK</code> status with the patient response. </p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>matchSimilar</td>
+<td>use this parameter to enter anything to match</td>
+</tr>
+<tr>
+<td>country</td>
+<td>Country where the patient is registered</td>
+</tr>
+<tr>
+<td>birthDate</td>
+<td>must be used with matchSimilar</td>
+</tr>
+<tr>
+<td>Gender</td>
+<td>Gender of the patient</td>
+</tr>
+<tr>
+<td>city</td>
+<td>City where the patient is registered</td>
+</tr>
+<tr>
+<td>address</td>
+<td>Address of the patients</td>
+</tr>
+<tr>
+<td>familyName</td>
+<td>must be used with matchSimilar</td>
+</tr>
+<tr>
+<td>middleName</td>
+<td>must be used with matchSimilar</td>
+</tr>
+<tr>
+<td>postalCode</td>
+<td>must be used with matchSimilar</td>
+</tr>
+<tr>
+<td>givenname</td>
+<td>must be used with matchSimilar</td>
+</tr>
+<tr>
+<td>state</td>
+<td>must be used with matchSimilar</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /patient?
+country=india
+&amp;gender=M
+</code></pre>
+<ul>
+<li><h3 id='list-patient-by-uuid'>List patient by UUID.</h3>
+<p>Retrieve a patient by its UUID. Returns a <code>404 Not Found</code> status if patient does not exist in the system. If the user is not logged in to perform this action, a <code>401 Unauthorized</code> status is returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /patient/:target_patient_uuid
+</code></pre><h2 id='create-a-patient'>Create a patient</h2>
+<ul>
+<li><p>To create a patient you need to specify the below properties in the request. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status is returned.</p>
+<h3 id='properties'>Properties</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>person</em></td>
+<td><code>PERSON_UUID</code></td>
+<td>Person resource UUID</td>
+</tr>
+<tr>
+<td><em>identifiers</em></td>
+<td><code>Array[]: Identifiers</code></td>
+<td>List of patientIdentifiers</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /patient
+{
+    "person": "uuid",
+    "identifiers": [
+    {
+        "identifier": "string",
+        "identifierType": "uuid",
+        "location": "uuid",
+        "preferred": true
+    }
+    ]
+}
+</code></pre><h2 id='update-a-patient'>Update a patient</h2>
+<ul>
+<li><p>Update a target patient with given UUID, this method only modifies properties in the request. 
+Returns a <code>404 Not Found</code> status if patient not exists. If user not logged in to perform this action, a <code>401 Unauthorized status returned</code>.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>uuid</em></td>
+<td><code>target_patient_uuid</code></td>
+<td>Target patient resource UUID</td>
+</tr>
+</tbody></table>
+<h3 id='properties-2'>Properties</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>resource</em></td>
+<td><code>Patient</code></td>
+<td>Patient resource with updated properties</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>POST /patient/:target_patient_uuid
+-d modified_patient_object
+</code></pre></li>
+</ul>
+<h2 id='delete-a-patient'>Delete a patient</h2>
+<ul>
+<li><p>Delete or retire a target patient by its UUID. Returns a <code>404 Not Found</code> status if patient not exists. If user is not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-3'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>uuid</strong></td>
+<td><code>String</code></td>
+<td>uuid to delete</td>
+</tr>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = &#39;true&#39;</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /patient/:target_patient_uuid?purge=true
+</code></pre><h2 id='list-patientidentifier-sub-resources'>List patientIdentifier sub resources</h2>
+<ul>
+<li><h3 id='list-all-patientidentifier-sub-resources-for-a-patient'>List all patientIdentifier sub resources for a patient.</h3>
+<p>Retrieve all <b>identifier</b> sub resources of a <b>patient</b> resource by <code>target_patient_uuid</code>.Returns a <code>404 Not Found</code> status if patientIdentifier not exists. If user not logged in to perform this action, a <code>401 unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /patient/:target_patient_uuid/identifier
+</code></pre>
+<ul>
+<li><h3 id='list-patientidentifier-sub-resource-by-it-39-s-uuid-and-parent-patient-uuid'>List patientIdentifier sub resource by it&#39;s UUID and parent patient UUID.</h3>
+<p>Retrieve a <b>patientIdentifier</b> sub resources of a <b>patient</b> resource. Returns a <code>404 Not Found</code> status if patientIdentifier not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status returned. </p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /patient/:target_patient_uuid/identifier/:target_identifier_uuid
+</code></pre><h2 id='create-a-patientidentifier-sub-resource-with-properties'>Create a patientIdentifier sub resource with properties</h2>
+<ul>
+<li><p>To create a patientIdentifier sub resource for a specific patient resource you need to specifyn below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameter'>Query parameter</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<p><code>target_patient_uuid</code> : patient resource uuid</p>
+<h3 id='properties-for-resource'>Properties for resource</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>identifier</em></td>
+<td><code>String</code></td>
+<td>value of the identifier</td>
+</tr>
+<tr>
+<td><em>identifierType</em></td>
+<td><code>Identifier_Type_UUID</code></td>
+<td>Create identifier from this Identifier_type</td>
+</tr>
+<tr>
+<td><em>location</em></td>
+<td><code>Location UUID</code></td>
+<td>Get patients for this location</td>
+</tr>
+<tr>
+<td><em>preferred</em></td>
+<td><code>boolean</code></td>
+<td>preferred/not preferred identifier</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST patient/:target_patient_uuid/identifier
+{ 
+    "identifier" : "string",
+    "identifierType" : "target_identifer_uuid",
+    "location" : "target_location_uuid",
+    "preferred" : true/false
+}
+</code></pre><h2 id='update-patientidentifier-sub-resource-with-properties'>Update patientIdentifier sub resource with properties</h2>
+<ul>
+<li><p>Updates an patientIdentifier sub resource value with given uuid, this method will only modify value of the sub resource. Returns a <code>404 Not Found</code> status if attribute not exists.If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='properties-3'>Properties</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>identifier</em></td>
+<td><code>String</code></td>
+<td>updated value of the identifier</td>
+</tr>
+<tr>
+<td><em>identifierType</em></td>
+<td><code>Identifier_Type_UUID</code></td>
+<td>Create identifier from this Identifier_type</td>
+</tr>
+<tr>
+<td><em>location</em></td>
+<td><code>Location UUID</code></td>
+<td>updated location</td>
+</tr>
+<tr>
+<td><em>preferred</em></td>
+<td><code>boolean</code></td>
+<td>updated status of preferred/not preferred identifier</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST patient/:target_patient_uuid/identifier/:target_identifier_uuid
+{ 
+"identifier" : "string",
+"identifierType" : "target_identifer_uuid",
+"location" : "target_location_uuid",
+"preferred" : true/false
+}
+</code></pre><h2 id='delete-patientidentifier-sub-resource-with-properties'>Delete patientIdentifier sub resource with properties</h2>
+<ul>
+<li><p>Delete or retire a target identifier sub resource by its UUID.Returns a <code>404 Not Found</code> status if attribute not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-4'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /patient/:target_patient_uuid/identifier/:target_identifier_uuid
+</code></pre><h2 id='list-allergy-sub-resources'>List allergy sub resources</h2>
+<ul>
+<li><p>List allergy sub resource by it&#39;s UUID and parent patient UUID.</p>
+
+<p>Retrieve a <b>allergy</b> sub resources of a <b>patient</b> resource. Returns a <code>404 Not Found</code> status if allergy not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status returned. </p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /patient/:target_patient_uuid/allergy/:target_allergy_uuid
+</code></pre><h2 id='create-a-allergy-sub-resource-with-properties'>Create a allergy sub resource with properties</h2>
+<ul>
+<li><p>To create a allergy sub resource for a specific patient resource you need to specify below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameter-2'>Query parameter</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<p><code>target_patient_uuid</code> : patient resource uuid</p>
+<h3 id='properties-for-resource-2'>Properties for resource</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>allergen</em></td>
+<td><code>String</code></td>
+<td>value of the allergen</td>
+</tr>
+<tr>
+<td><em>severity</em></td>
+<td><code>Severity_UUID</code></td>
+<td>Severity uuid</td>
+</tr>
+<tr>
+<td><em>comment</em></td>
+<td><code>String</code></td>
+<td>comment for the allergy</td>
+</tr>
+<tr>
+<td><em>allergy</em></td>
+<td><code>allergy_UUID</code></td>
+<td>allergy uuid</td>
+</tr>
+<tr>
+<td><em>reaction</em></td>
+<td><code>reaction_UUID</code></td>
+<td>reaction uuid</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST patient/:target_patient_uuid/allergy
+{
+    "allergen": {},
+    "severity": {
+        "uuid": "string"
+    },
+    "comment": "string",
+    "reactions": [
+        {
+            "allergy": {
+            "uuid": "string"
+        },
+        "reaction": {
+            "uuid": "string"
+        }
+    }
+]
+}
+</code></pre><h2 id='update-allergy-sub-resource-with-properties'>Update allergy sub resource with properties</h2>
+<ul>
+<li><p>Updates an allergy sub resource value with given uuid, this method will only modify value of the sub resource. Returns a <code>404 Not Found</code> status if property not exists.If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='query-parameter-3'>Query parameter</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<p><code>target_patient_uuid</code> : patient resource uuid
+<code>target_allergy_uuid</code> : allergy resource uuid</p>
+<h3 id='properties-for-resource-3'>Properties for resource</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>allergen</em></td>
+<td><code>String</code></td>
+<td>value of the allergen</td>
+</tr>
+<tr>
+<td><em>severity</em></td>
+<td><code>Severity_UUID</code></td>
+<td>Severity uuid</td>
+</tr>
+<tr>
+<td><em>comment</em></td>
+<td><code>String</code></td>
+<td>comment for the allergy</td>
+</tr>
+<tr>
+<td><em>allergy</em></td>
+<td><code>allergy_UUID</code></td>
+<td>allergy uuid</td>
+</tr>
+<tr>
+<td><em>reaction</em></td>
+<td><code>reaction_UUID</code></td>
+<td>reaction uuid</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST patient/:target_patient_uuid/allergy/:target_allergy_uuid
+{
+"allergen": {},
+"severity": {
+    "uuid": "string"
+},
+"comment": "string",
+"reactions": [
+    {
+        "allergy": {
+        "uuid": "string"
+    },
+    "reaction": {
+        "uuid": "string"
+    }
+}
+]
+}
+</code></pre><h2 id='delete-allergy-sub-resource-with-properties'>Delete allergy sub resource with properties</h2>
+<ul>
+<li><p>Delete or retire a target allergy sub resource by its UUID.Returns a <code>404 Not Found</code> status if attribute not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-5'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /patient/:target_patient_uuid/allergy/:target_allergy_uuid
+</code></pre>

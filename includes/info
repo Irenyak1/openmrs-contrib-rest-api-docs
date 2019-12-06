@@ -1,0 +1,96 @@
+<h1 id='openmrs-rest-api'>OpenMRS REST API</h1>
+<p>Welcome to the OpenMRS REST API documentation! OpenMRS is a software 
+platform and a reference application which enables design of a customized 
+medical records system with no programming knowledge (although medical and 
+systems analysis knowledge is required). </p>
+
+<p>It is a common platform upon which medical informatics efforts in developing
+countries can be built. The system is based on a conceptual database structure 
+which is not dependent on the actual types of medical information required to 
+be collected or on particular data collection forms and so can be customized 
+for different uses.</p>
+
+<p>This document provides High level documentation of OpenMRS APIs with code 
+samples which are in the dark area to the right. If you find anything missing 
+or incorrect please consider proposing revision on <a href="https://github.com/openmrs/openmrs-contrib-rest-api-docs">GitHub</a>.</p>
+
+<p>This documentation serves as a reference to the bespoke <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> 
+API for <a href="https://openmrs.org/">OpenMRS</a>.</p>
+<h1 id='getting-started'>Getting Started</h1>
+<p>If you are new to openMRS checkout the <a href="https://wiki.openmrs.org/display/docs/Getting+Started+as+a+Developer">Getting Started as a Developer Guide</a>
+from openMRS</p>
+<h1 id='current-version'>Current version</h1>
+<ul>
+<li><p>By default, all requests to <code>/openmrs/ws/rest</code> receive the v1 version of the REST API.</p></li>
+<li><p>The OpenMRS REST Web Services module includes dynamically generated documentation. 
+For example, see the 
+<a href="https://demo.openmrs.org/openmrs/module/webservices/rest/apiDocs.htm">swagger documentation</a> on the demo server (username <strong>admin</strong>, password <strong>Admin123</strong>).</p></li>
+</ul>
+<h1 id='purpose'>Purpose</h1>
+<ul>
+<li><p>The purpose of this documentation is to provide a brief and good taste and experience of the APIs that are used in OpenMRS community to the new developers so that can onboard in the projects within the org easily.</p></li>
+<li><p>The documentation also aims to assist the existing developers to get to know the conceptual context of the APIs and how they help the consumers during the interaction in the real world.</p></li>
+</ul>
+<h1 id='schema'>Schema</h1>
+<p>All API access is over HTTPS, and can be accessed from <code>https://demo.openmrs.org/openmrs/ws/rest/v1</code>. All data is sent and received as JSON.</p>
+<pre class="highlight shell_session"><code>curl -X GET "https://demo.openmrs.org/openmrs/ws/rest/v1/concept"
+connection: keep-alive 
+content-length: 9731 
+content-type: application/json;charset=UTF-8 
+date: Wed, 20 Nov 2019 14:13:54 GMT 
+etag: "04c83ff0cf2cc35cf05a2075ad117df83" 
+server: nginx/1.10.3 (Ubuntu) 
+strict-transport-security: max-age=15768000 
+</code></pre><h1 id='resources'>Resources</h1>
+<ul>
+<li><p>OpenMRS objects (persons, patients, encounters, observations, etc.) are exposed by the REST Web Services 
+modules as a REST resource as documented here.</p></li>
+<li><p>Resources have a default representation, which returns key properites. Most resources can be fetched using a 
+full representation (using the parameter <code>v=full</code>) that includes a more comprehensive list of properties.</p></li>
+</ul>
+<h1 id='subresources'>Subresources</h1>
+<ul>
+<li><p>Some resources are not defined or do not make sense apart from their parent object. We refer 
+to these as subresources. </p></li>
+<li><p>Examples of subresources are PersonNames, PersonAddresses, ConceptNames, etc. </p></li>
+<li><p>You can act on subresources under the parent&#39;s url</p></li>
+</ul>
+<h3 id='examples'>Examples</h3><h4 id='adding-a-person-name'>Adding a person name.</h4><pre class="highlight shell_session"><code>POST /openmrs/ws/rest/v1/person/:target_person_uuid/name 
+{
+  "givenName": "John",
+  "familyName": "Smith"
+}
+</code></pre><h4 id='editing-a-person-39-s-name'>Editing a person&#39;s name.</h4><pre class="highlight shell_session"><code>POST /openmrs/ws/rest/v1/person/:target_person_uuid/name/:target_name_uuid 
+{
+  "givenName": "Johnny"
+}
+</code></pre>
+<ul>
+<li><p>A subresource can have only one parent. </p></li>
+<li><p>If it seems like an resource has two or more parents, then it is most likely a top-level resource. </p></li>
+<li><p>For example &quot;encounters&quot; is not be a subresource of &quot;patient&quot; and &quot;location&quot; resources (answering questions of &quot;all encounters of a patient&quot; and &quot;all encounters at a location&quot;). </p></li>
+</ul>
+<h4 id='instead-these-should-be-queries-on-the-encounter-resource'>Instead, these should be queries on the encounter resource:</h4>
+<p>Get encounter list for specific patient.</p>
+<pre class="highlight shell_session"><code> GET /encounter?patient=:target_patient_uuid
+</code></pre>
+<p>Get encounter list for specific location.</p>
+<pre class="highlight shell_session"><code> GET /encounter?location=:target_location_uuid
+</code></pre><h1 id='resources-with-subtypes'>Resources with subtypes</h1>
+<ul>
+<li><p>Some resources can have subtypes. For example, the Order resource contains DrugOrder and TestOrder subtypes</p></li>
+<li><p>When creating a resource that has subtypes via a <code>POST</code>, you must specify which subtype of the resource you are creating, 
+with a special t property of the resource.</p></li>
+</ul>
+<h3 id='examples-2'>Examples</h3><pre class="highlight shell_session"><code>POST /openmrs/ws/rest/v1/order
+{"t": "testorder", /*... and other properties */}
+</code></pre>
+<ul>
+<li><p>If you GET a resource that has subtypes, each result will be of one of those subtypes, 
+which you can see by looking at the special property of each result. </p></li>
+<li><p>You may query for only a certain subtype of a resource by providing a t query parameter. </p></li>
+</ul>
+
+<p>Get encounter orders of druge order sub type.</p>
+<pre class="highlight shell_session"><code>GET  /openmrs/ws/rest/v1/order?&amp;t=drugorder&amp;v=full'
+</code></pre>

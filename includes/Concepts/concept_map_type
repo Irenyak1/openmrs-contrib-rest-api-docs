@@ -1,0 +1,132 @@
+<h1 id='concept-map-type'>Concept Map Type</h1><h2 id='overview'>Overview</h2>
+<ul>
+<li><p>Concept Mappings are added to facilitate managing concept dictionaries and point to other concepts which have the same meaning. 
+Mappings are useful when you need to receive or send information to external systems, letting you define how your system&#39;s 
+concepts relate to external concepts such as standardized medical vocabularies (e.g., ICD, LOINC, SNOMED). </p></li>
+<li><p>For example, add a mapping to a concept in the MCL dictionary. You can save the concept now and create some answers.</p></li>
+<li><p>Repeat the steps and create the concepts PLANNING PREGNANCY and CURRENTLY PREGNANT of Class Finding and Datatype Boolean. 
+The last possible answer will be OTHER of Class Misc and Datatype N/A. After creating three new concepts, you can edit 
+ANTENATAL VISIT REASON and add them as answers.</p></li>
+</ul>
+<h2 id='available-operations'>Available operations.</h2>
+<ol>
+<li><a href="#list-concept-map-types">List concept mapping types</a></li>
+<li><a href="#create-a-concept-map-type">Create a concept mapping type</a></li>
+<li><a href="#update-a-concept-map-type">Update a concept mapping typee</a></li>
+<li><a href="#delete-a-concept-map-type">Delete a concept mapping type</a></li>
+</ol>
+<h3 id='list-concept-map-types'>List concept map types</h3>
+<ul>
+<li><h4 id='list-all-non-retired-concept-map-types'>List all non-retired concept map types.</h4>
+<p>Quickly filter concept map types with a given search query.Returns a <code>404 Not Found</code> status if concept map type not exists. 
+If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h5 id='query-parameters'>Query Parameters</h5>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>String</code></td>
+<td>Full or partial name search term. Search is case insensitive.</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>GET /conceptmaptype?q="same"
+</code></pre></li>
+<li><h4 id='list-concept-map-type-by-uuid'>List concept map type by UUID.</h4>
+<p>Retrieve a concept map type by its UUID. Returns a <code>404 Not Found</code> status if concept map type not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<pre class="highlight shell_session"><code>GET /conceptmaptype/:target_concept_map_type_uuid
+</code></pre></li>
+</ul>
+<h3 id='create-a-concept-map-type'>Create a concept map type</h3>
+<ul>
+<li><p>To Create a concept map type you need to specify below attributes in the request body. If you are not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the concept mapping type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>A brief description of the concept mapping type</td>
+</tr>
+<tr>
+<td><em>isHidden</em></td>
+<td><code>Boolean</code></td>
+<td>State to record concept map is hidden or not</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptmaptype
+    {
+      "name": "SAME-AS",
+      "isHidden": false
+    }
+</code></pre><h3 id='update-a-concept-map-type'>Update a concept map type</h3></li>
+<li><p>Update a target concept map type with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if concept map not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes-2'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the concept mapping type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>A brief description of the concept mapping type</td>
+</tr>
+<tr>
+<td><em>isHidden</em></td>
+<td><code>Boolean</code></td>
+<td>State to record concept map is hidden or not</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptmaptype
+    {
+      "name": "SAME-AS",
+      "isHidden": true
+    }
+</code></pre></li>
+</ul>
+<h3 id='delete-a-concept-map-type'>Delete a concept map type</h3>
+<ul>
+<li><p>Delete or Retire a target concept map type by its UUID. Returns a <code>404 Not Found</code> status if concept map not exists.If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='query-parameters-2'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    DELETE /conceptmaptype/:target_concept_map_type_uuid?purge=true
+</code></pre></li>
+</ul>

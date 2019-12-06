@@ -1,0 +1,695 @@
+<h1 id='concepts'>Concepts</h1><h2 id='concepts-overview'>Concepts Overview</h2>
+<ul>
+<li><p>The concept is the basic element of flexibility in OpenMRS. Concepts are the individual data points collected from a 
+population of patients. Concepts include both questions and answers. </p></li>
+<li><p>For example, blood type data is collected for a patient.  The question is &quot;What is the blood type for the patient?&quot;, with a
+set of discrete answers of &quot;A, B, AB or O&quot;.  To implement this in OpenMRS with concepts, the question is a concept 
+(&quot;blood type&quot;) and each response (&quot;A&quot;, &quot;B&quot;, &quot;AB&quot; and &quot;O&quot;) is also a concept.  For this one question, a total of 5 concepts 
+are required.</p></li>
+<li><p>What about a question where the answer is not a discrete answer?  If the question is &quot;What is the name of your first pet?&quot;,
+the answer would be expressed in a text box.  It would not be possible to provide a complete list of every possible name for
+your pet.  In this example, there would be one concept -- &quot;name of first pet&quot;.</p></li>
+<li><p>The bottom line is, if you need a medical word within your electronic records system, it needs to be defined within the 
+concept dictionary.  More detail about all the possible concepts in a later section.</p></li>
+</ul>
+<h2 id='sub-resource-types-of-concepts'>Sub Resource types of Concepts</h2><h3 id='concept-attribute'>Concept Attribute.</h3>
+<ul>
+<li><p>If you wish to record extra information about concept, you can create Concept Attributes and assign them to Concept Types.</p></li>
+<li><p>Concept attributes exists specifically to allow implementations to extend the data model.</p></li>
+</ul>
+<h3 id='concept-name'>Concept Name.</h3>
+<ul>
+<li>ConceptNames are the words or phrases used to express the idea of a Concept within a particular locale. 
+Because there may be many names for any concept.</li>
+</ul>
+<h3 id='concept-mapping'>Concept Mapping.</h3>
+<ul>
+<li><p>Concept Mappings are added to facilitate managing concept dictionaries and point to other concepts which have the same meaning. 
+Mappings are useful when you need to receive or send information to external systems, letting you define how your system&#39;s
+concepts relate to external concepts such as standardized medical vocabularies (e.g., ICD, LOINC, SNOMED).</p></li>
+<li><p>For example, add a mapping to a concept in the MCL dictionary. You can save the concept now and create some answers.</p></li>
+</ul>
+<h3 id='concept-description'>Concept Description.</h3>
+<ul>
+<li>A clear and concise description of the concept, as agreed upon by the members of the organization or the most commonly 
+referenced source.<br></li>
+</ul>
+<h2 id='available-operations-for-concepts'>Available operations for Concepts</h2>
+<ol>
+<li> <a href="#list-concepts">List concepts</a></li>
+<li> <a href="#create-a-concept">Create a concept</a></li>
+<li> <a href="#update-a-concept">Update a concept</a></li>
+<li> <a href="#delete-a-concept">Delete a concept</a></li>
+<li> <a href="#list-concept-mapping">List concept mapping</a></li>
+<li> <a href="#create-a-concept-mapping-with-properties">Create concept mapping with properties</a></li>
+<li> <a href="#update-a-concept-mapping">Update concept mapping</a></li>
+<li> <a href="#delete-a-concept-mapping">Delete concept mapping</a></li>
+<li> <a href="#list-concept-name">List concept name</a></li>
+<li><a href="#create-a-concept-name-with-properties">Create concept name with properties</a></li>
+<li><a href="#update-concept-name">Update concept name</a></li>
+<li><a href="#delete-concept-name">Delete concept name</a></li>
+<li><a href="#list-concept-attribute">List concept attribute</a></li>
+<li><a href="#create-a-concept-attribute-with-properties">Create concept attribute with properties</a></li>
+<li><a href="#update-concept-attribute">Update concept attribute</a></li>
+<li><a href="#delete-concept-attribute">Delete concept attribute</a></li>
+<li><a href="#list-concept-descriptions">List concept description</a></li>
+<li><a href="#create-a-concept-description-with-properties">Create concept description with properties</a></li>
+<li><a href="#update-concept-description">Update concept description</a></li>
+<li>[Delete concept description](#delete-concept-description</li>
+</ol>
+<h2 id='list-concepts'>List concepts</h2>
+<ul>
+<li><h3 id='list-all-concepts'>List all concepts.</h3>
+<p>Quickly filter concepts with given query parameters.Returns a <code>404 Not Found</code> status if concepts not exists. If user not logged 
+in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='query-parameters'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Display Name of concept object</td>
+</tr>
+<tr>
+<td><em>code</em></td>
+<td><code>String</code></td>
+<td>Represents a name from a standard medical code</td>
+</tr>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>ConceptNames are the words or phrases used to express the idea of a Concept within a particular locale</td>
+</tr>
+<tr>
+<td><em>term</em></td>
+<td><code>String</code></td>
+<td>Medical coding term or OpenMRS concept dictionary term that could be mapped to a concept</td>
+</tr>
+<tr>
+<td><em>source</em></td>
+<td><code>String</code></td>
+<td>A concept can have any number of mappings to any number of other vocabularies. Other vocabularies are called &quot;concept sources&quot; in OpenMRS (ie. LOINC, SNOMED, ICD-9, ICD10, RxNORM, etc), but the concept source can also be a custom (ie. org.openmrs.module.mdrtb, PIH, AMPATH, MVP, etc.). Every concept can define a string for its mapping in any &quot;concept source&quot; defined in the database</td>
+</tr>
+<tr>
+<td><em>class</em></td>
+<td><code>String</code></td>
+<td>The concept&#39;s class provides a useful way to narrow down the scope of the information that the concept is intended to capture.  In this way, the class is helpful for data extraction.  This classification details how a concept will be represented (i.e. as a question or an answer) when the information is stored.  OpenMRS contains several default classes to use when defining concepts, but implementation sites may also create additional custom concept classes for use.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept?
+  term=38341003
+  &amp;source=SNOMED%20CT
+</code></pre>
+<ul>
+<li><h3 id='query-concept-by-uuid'>Query concept by UUID.</h3>
+<p>Retrieve an concepts by its UUID. Returns a <code>404 Not Found</code> status if concepts not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid
+</code></pre><h2 id='create-a-concept'>Create a concept</h2>
+<ul>
+<li><p>To Create an concept you need to specify below attributes in the request body.If you are not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>names</em></td>
+<td><code>String</code></td>
+<td>ConceptNames are the words or phrases used to express the idea of a Concept within a particular locale (required)</td>
+</tr>
+<tr>
+<td><em>datatype</em></td>
+<td><code>target_concept_datatype_uuid</code></td>
+<td>A concept datatype prescribes the structured format by which you desire the data to be represented. In simple terms, the datatype defines the type of data that the concept is intended to collect (required)</td>
+</tr>
+<tr>
+<td><em>version</em></td>
+<td><code>String</code></td>
+<td>A method to keep track of the number of updates applied to a specific concept (required)</td>
+</tr>
+<tr>
+<td><em>answers</em></td>
+<td><code>Array of Child Concepts</code></td>
+<td>An array of concepts which are answers for the current concept</td>
+</tr>
+<tr>
+<td><em>setMembers</em></td>
+<td><code>Array of Child Concepts</code></td>
+<td>Describes the questions contained by a concept set. Each set member is a question concept in and of itself</td>
+</tr>
+<tr>
+<td><em>units</em></td>
+<td><code>String</code></td>
+<td>Standard unit used to measure the concept</td>
+</tr>
+<tr>
+<td><em>allowDecimal</em></td>
+<td><code>String</code></td>
+<td>Allow to use decimals</td>
+</tr>
+<tr>
+<td><em>conceptClass</em></td>
+<td><code>target_concept_class_uuid</code></td>
+<td>The classification of a concept. This classification details how a concept will be represented (i.e. as a question or an answer) (required)</td>
+</tr>
+<tr>
+<td><em>descriptions</em></td>
+<td><code>Array[] String</code></td>
+<td>A concept map connects a concept term to a concept</td>
+</tr>
+<tr>
+<td><em>mappings</em></td>
+<td><code>Array[] String</code></td>
+<td>Connects a concept term to a concept.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /concept
+{
+  "names": [
+    {
+      "name": "What is the blood type for the patient?",
+      "locale": "en",
+      "localePreferred": true,
+      "conceptNameType": "FULLY_SPECIFIED"
+    }
+  ],
+  "datatype": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+  "version": "1.2.2",
+  "conceptClass": "8d492774-c2cc-11de-8d13-0010c6dffd0f"
+}
+</code></pre><h2 id='update-a-concept'>Update a concept</h2>
+<ul>
+<li><p>Update a target concept with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if concept not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>names</em></td>
+<td><code>String</code></td>
+<td>ConceptNames are the words or phrases used to express the idea of a Concept within a particular locale (required)</td>
+</tr>
+<tr>
+<td><em>datatype</em></td>
+<td><code>target_concept_datatype_uuid</code></td>
+<td>A concept datatype prescribes the structured format by which you desire the data to be represented. In simple terms, the datatype defines the type of data that the concept is intended to collect (required)</td>
+</tr>
+<tr>
+<td><em>version</em></td>
+<td><code>String</code></td>
+<td>A method to keep track of the number of updates applied to a specific concept (required)</td>
+</tr>
+<tr>
+<td><em>answers</em></td>
+<td><code>Array of Child Concepts</code></td>
+<td>An array of concepts which are answers for the current concept</td>
+</tr>
+<tr>
+<td><em>setMembers</em></td>
+<td><code>Array of Child Concepts</code></td>
+<td>Describes the questions contained by a concept set. Each set member is a question concept in and of itself</td>
+</tr>
+<tr>
+<td><em>units</em></td>
+<td><code>String</code></td>
+<td>Standard unit used to measure the concept</td>
+</tr>
+<tr>
+<td><em>allowDecimal</em></td>
+<td><code>String</code></td>
+<td>Allow to use decimals</td>
+</tr>
+<tr>
+<td><em>conceptClass</em></td>
+<td><code>target_concept_class_uuid</code></td>
+<td>The classification of a concept. This classification details how a concept will be represented (i.e. as a question or an answer) (required)</td>
+</tr>
+<tr>
+<td><em>descriptions</em></td>
+<td><code>Array[] String</code></td>
+<td>A concept map connects a concept term to a concept</td>
+</tr>
+<tr>
+<td><em>mappings</em></td>
+<td><code>Array[] String</code></td>
+<td>Connects a concept term to a concept.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /concept/:target_concept_uuid
+{
+  "names": [
+    {
+      "name": "What is the blood type for the sick patient?",
+      "locale": "en",
+      "localePreferred": true,
+      "conceptNameType": "FULLY_SPECIFIED"
+    }
+  ],
+  "datatype": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+  "version": "1.2.2",
+  "conceptClass": "8d492774-c2cc-11de-8d13-0010c6dffd0f"
+}
+</code></pre><h2 id='delete-a-concept'>Delete a concept</h2>
+<ul>
+<li><p>Delete or retire a target concept by its UUID. Returns a <code>404 Not Found</code> status if concept not exists.If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /concept/:target_concept_uuid?purge=true
+</code></pre><h2 id='list-concept-mapping'>List concept mapping</h2>
+<ul>
+<li><h3 id='list-all-concept-mappings-for-a-concept'>List all concept mappings for a concept.</h3>
+<p>Retrieve all <strong>concept mapping</strong> sub resources of a <strong>concept</strong> resource by target_concept_uuid. Returns a 
+<code>404 Not Found</code> status if concept mapping not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/mapping 
+</code></pre>
+<ul>
+<li><h3 id='list-concept-mapping-by-it-39-s-uuid-and-parent-concept-uuid'>List concept mapping by it&#39;s UUID and parent concept UUID.</h3>
+<p>Retrieve an <strong>concept mapping</strong> sub resources of a <strong>concept</strong> resource. Returns a 
+ <code>404 Not Found</code> status if concept mapping not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status
+ returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/mapping/:target_concept_mapping_uuid
+</code></pre><h2 id='create-a-concept-mapping-with-properties'>Create a concept mapping with properties</h2>
+<ul>
+<li><p>To Create a concept mapping sub resource for a specific concept resource you need to specify below attributes in the request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-3'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>conceptReferenceTerm</em></td>
+<td><code>target_concept_reference_term_type_uuid</code></td>
+<td>A concept term defines a medical coding term or OpenMRS concept dictionary term that could be mapped to a concept (required)</td>
+</tr>
+<tr>
+<td><em>conceptMapType</em></td>
+<td><code>target_concept_map_type_uuid</code></td>
+<td>A concept map connects a concept term to a concept (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/mapping
+{
+  "conceptReferenceTerm": "21fb14d7-5cd9-3621-ac30-c9e57320e233",
+  "conceptMapType": "35543629-7d8c-11e1-909d-c80aa9edcf4e"
+}
+</code></pre><h2 id='update-a-concept-mapping'>Update a concept mapping</h2>
+<ul>
+<li><p>Updates an concept mapping sub resource value with given uuid, this method will only modify value of the sub resource. Returns 
+a <code>404 Not Found</code> status if concept mapping not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='attributes-4'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>conceptReferenceTerm</em></td>
+<td><code>target_concept_reference_term_type_uuid</code></td>
+<td>A concept term defines a medical coding term or OpenMRS concept dictionary term that could be mapped to a concept (required)</td>
+</tr>
+<tr>
+<td><em>conceptMapType</em></td>
+<td><code>target_concept_map_type_uuid</code></td>
+<td>A concept map connects a concept term to a concept (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/mapping
+{
+  "conceptReferenceTerm": "21fb14d7-5cd9-3621-ac30-c9e57320e233",
+  "conceptMapType": "35543629-7d8c-11e1-909d-c80aa9edcf4e"
+}
+</code></pre><h2 id='delete-a-concept-mapping'>Delete a concept mapping</h2>
+<ul>
+<li><p>Delete or Voided a target concept mapping sub resource by its UUID. Returns a <code>404 Not Found</code> status if concept mapping not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='query-parameters-3'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’. Purging will attempt to irreversibly remove the concept mapping type from the system. Concept mapping types that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE concept/:target_concept_uuid/mapping/:target_concept_mapping_uuid
+</code></pre><h2 id='list-concept-name'>List concept name</h2>
+<ul>
+<li><h3 id='list-all-concept-names-for-a-concept'>List all concept names for a concept.</h3>
+<p>Retrieve all <strong>concept name</strong> sub resources of a <strong>concept</strong> resource by target_concept_uuid. Returns a 
+<code>404 Not Found</code> status if concept name not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/name 
+</code></pre>
+<ul>
+<li><h3 id='list-concept-name-it-39-s-uuid-and-parent-concept-uuid'>List concept name it&#39;s UUID and parent concept UUID.</h3>
+<p>Retrieve an <strong>concept name</strong> sub resources of a <strong>concept</strong> resource. Returns a 
+ <code>404 Not Found</code> status if concept name not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status
+ returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/name/:target_concept_name_uuid
+</code></pre><h2 id='create-a-concept-name-with-properties'>Create a concept name with properties</h2>
+<ul>
+<li><p>To Create a concept name sub resource for a specific concept resource you need to specify below attributes in the request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-5'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the concept (required)</td>
+</tr>
+<tr>
+<td><em>locale</em></td>
+<td><code>String</code></td>
+<td>Language to record concept name (required)</td>
+</tr>
+<tr>
+<td><em>localePreferred</em></td>
+<td><code>String</code></td>
+<td>This is the preferred name to use within a locale.  By default, this is the fully-specified name; however, full-specified names are sometimes long and more detailed than necessary for day-to-day use.  In those cases, a synonym can be defined to be the locale-preferred name.  There can only be one preferred name within a locale.  The primary term should be the word(s) used most often by those who will have access to the records to prevent duplicate concept creation.</td>
+</tr>
+<tr>
+<td><em>conceptNameType</em></td>
+<td><code>String</code></td>
+<td>Type of the name to be specified.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/name
+{
+  "name": "Bronchospasm",
+  "locale": "en",
+  "localePreferred": true,
+  "conceptNameType": "FULLY_SPECIFIED"
+}
+</code></pre><h2 id='update-concept-name'>Update concept name</h2>
+<ul>
+<li><p>Updates an concept name sub resource value with given uuid, this method will only modify value of the sub resource. Returns 
+a <code>404 Not Found</code> status if concept name not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='attributes-6'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the concept (required)</td>
+</tr>
+<tr>
+<td><em>locale</em></td>
+<td><code>String</code></td>
+<td>Language to record concept name (required)</td>
+</tr>
+<tr>
+<td><em>localePreferred</em></td>
+<td><code>String</code></td>
+<td>This is the preferred name to use within a locale.  By default, this is the fully-specified name; however, full-specified names are sometimes long and more detailed than necessary for day-to-day use.  In those cases, a synonym can be defined to be the locale-preferred name.  There can only be one preferred name within a locale.  The primary term should be the word(s) used most often by those who will have access to the records to prevent duplicate concept creation.</td>
+</tr>
+<tr>
+<td><em>conceptNameType</em></td>
+<td><code>String</code></td>
+<td>Type of the name to be specified.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/name
+{
+  "name": "Bronchospasm",
+  "locale": "en",
+  "localePreferred": true,
+  "conceptNameType": "FULLY_SPECIFIED"
+}
+</code></pre><h2 id='delete-concept-name'>Delete concept name</h2>
+<ul>
+<li><p>Delete or retire a target concept name sub resource by its UUID. Returns a <code>404 Not Found</code> status if concept name not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-4'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’. Purging will attempt to irreversibly remove the concept name type from the system. Concept name types that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE concept/:target_concept_uuid/name/:target_concept_name_uuid
+</code></pre><h2 id='list-concept-attribute'>List concept attribute</h2>
+<ul>
+<li><h3 id='list-all-concept-attributes-for-a-concept'>List all concept attributes for a concept.</h3>
+<p>Retrieve all <strong>concept attribute</strong> sub resources of a <strong>concept</strong> resource by target_concept_uuid. Returns a 
+<code>404 Not Found</code> status if concept attribute not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/attribute 
+</code></pre>
+<ul>
+<li><h3 id='list-concept-attribute-by-it-39-s-uuid-and-parent-concept-uuid'>List concept attribute by it&#39;s UUID and parent concept UUID.</h3>
+<p>Retrieve an <strong>concept attribute</strong> sub resources of a <strong>concept</strong> resource. Returns a 
+ <code>404 Not Found</code> status if concept attribute not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status
+ returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/attribute/:target_concept_attribute_uuid
+</code></pre><h2 id='create-a-concept-attribute-with-properties'>Create a concept attribute with properties</h2>
+<ul>
+<li><p>To Create a concept attribute sub resource for a specific concept resource you need to specify below attributes in the request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-7'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>Attribute_Type UUID</code></td>
+<td>Create Attribute from this Concept Attribute_Type (required)</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>Depends on Attribute_Type Selected</code></td>
+<td>Value for the attribute (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/attribute
+{
+  "attributeType": "target_concept_attribute_type_uuid",
+  "value": "value_for_the_attriute"
+}
+</code></pre><h2 id='update-concept-attribute'>Update concept attribute</h2>
+<ul>
+<li><p>Updates an concept attribute sub resource value with given uuid, this method will only modify value of the sub resource. Returns 
+a <code>404 Not Found</code> status if concept attribute not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='attributes-8'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>Attribute_Type UUID</code></td>
+<td>Create Attribute from this Concept Attribute_Type (required)</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>Depends on Attribute_Type Selected</code></td>
+<td>Value for the attribute (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/attribute
+{
+  "attributeType": "target_concept_attribute_type_uuid",
+  "value": "value_for_the_attriute"
+}
+</code></pre><h2 id='delete-concept-attribute'>Delete concept attribute</h2>
+<ul>
+<li><p>Delete or retire a target concept attribute sub resource by its UUID. Returns a <code>404 Not Found</code> status if concept attribute not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-5'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’. Purging will attempt to irreversibly remove the concept name type from the system. Concept name types that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE concept/:target_concept_uuid/attribute/:target_concept_attribute_uuid
+</code></pre><h2 id='list-concept-descriptions'>List concept descriptions</h2>
+<ul>
+<li><h3 id='list-all-concept-descriptions-for-a-concept'>List all concept descriptions for a concept.</h3>
+<p>Retrieve all <strong>concept description</strong> sub resources of a <strong>concept</strong> resource by target_concept_uuid. Returns a 
+<code>404 Not Found</code> status if concept description not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>    GET /concept/:target_concept_uuid/description 
+</code></pre>
+<ul>
+<li><h3 id='list-concept-description-by-it-39-s-uuid-and-parent-concept-uuid'>List concept description by it&#39;s UUID and parent concept UUID.</h3>
+<p>Retrieve an <strong>concept description</strong> sub resources of a <strong>concept</strong> resource. Returns a 
+ <code>404 Not Found</code> status if concept description not exists. If you are not logged in to perform this action, a <code>401 Unauthorized</code> status
+ returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /concept/:target_concept_uuid/description/:target_concept_description_uuid
+</code></pre><h2 id='create-a-concept-description-with-properties'>Create a concept description with properties</h2>
+<ul>
+<li><p>To Create a concept description sub resource for a specific concept resource you need to specify below attributes in the request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-9'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description text to e provided for the concept (required)</td>
+</tr>
+<tr>
+<td><em>locale</em></td>
+<td><code>String</code></td>
+<td>Language description provided by (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/description
+{
+  "description": "Pregnancy terminated by a spontaneous abortion.",
+  "locale": "en"
+}
+</code></pre><h2 id='update-concept-description'>Update concept description</h2>
+<ul>
+<li><p>Updates an concept description sub resource value with given uuid, this method will only modify value of the sub resource. Returns 
+a <code>404 Not Found</code> status if concept description not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status
+returned.</p>
+<h3 id='attributes-10'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description text to e provided for the concept (required)</td>
+</tr>
+<tr>
+<td><em>locale</em></td>
+<td><code>String</code></td>
+<td>Language description provided by (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST concept/:target_concept_uuid/description
+{
+  "description": "Pregnancy terminated by a spontaneous abortion.",
+  "locale": "en"
+}
+</code></pre><h2 id='delete-concept-description'>Delete concept description</h2>
+<ul>
+<li><p>Delete or retire a target concept description sub resource by its UUID. Returns a <code>404 Not Found</code> status if concept description not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-6'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’. Purging will attempt to irreversibly remove the concept description  from the system. Concept description that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE concept/:target_concept_uuid/description/:target_concept_description_uuid
+</code></pre>

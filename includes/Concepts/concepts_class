@@ -1,0 +1,105 @@
+<h1 id='concept-class'>Concept Class</h1><h2 id='overview'>Overview</h2>
+<ul>
+<li>The concept&#39;s class provides a useful way to narrow down the scope of the information that the concept is intended to capture.<br>
+In this way, the class is helpful for data extraction.  This classification details how a concept will be represented 
+(i.e. as a question or an answer) when the information is stored.  OpenMRS contains several default classes to use when 
+defining concepts, but implementation sites may also create additional custom concept classes for use. </li>
+</ul>
+<h2 id='available-operations'>Available operations.</h2>
+<ol>
+<li><a href="#list-concept-classes">List concept classes</a></li>
+<li><a href="#create-a-concept-class">Create a concept class</a></li>
+<li><a href="#update-a-concept-class">Update a concept class</a></li>
+<li><a href="#delete-a-concept-class">Delete a concept class</a></li>
+</ol>
+<h3 id='list-concept-classes'>List concept classes</h3>
+<ul>
+<li><h4 id='list-all-non-retired-concept-classes'>List all non-retired concept classes.</h4>
+<p>List all concept classes with a given search query.Returns a <code>404 Not Found</code> status if concept classes not exists. 
+If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<pre class="highlight shell_session"><code>GET /conceptclass"
+</code></pre></li>
+<li><h4 id='list-concept-class-type-by-uuid'>List concept class type by UUID.</h4>
+<p>Retrieve a concept class by its UUID. Returns a <code>404 Not Found</code> status if concept class type not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<pre class="highlight shell_session"><code>GET /conceptclass/:target_concept_class_uuid
+</code></pre></li>
+</ul>
+<h3 id='create-a-concept-class'>Create a concept class</h3>
+<ul>
+<li><p>To Create a concept class you need to specify below attributes in the request body. If you are not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the concept class (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptclass
+    {
+      "name": "Procedure",
+      "description": "Describes a clinical procedure"
+    }
+</code></pre><h3 id='update-a-concept-class'>Update a concept class</h3></li>
+<li><p>Update a target concept class with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if concept class not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes-2'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the concept class (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptclass
+    {
+      "name": "Procedure",
+      "description": "Describes a clinical procedure"
+    }
+</code></pre></li>
+</ul>
+<h3 id='delete-a-concept-class'>Delete a concept class</h3>
+<ul>
+<li><p>Delete or Retire a target concept class  by its UUID. Returns a <code>404 Not Found</code> status if concept class not exists.If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='query-parameters'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    DELETE /conceptclass/:target_concept_class_uuid?purge=true
+</code></pre></li>
+</ul>

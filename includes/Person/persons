@@ -1,0 +1,632 @@
+<h1 id='person'>Person</h1><h2 id='person-overview'>Person Overview</h2>
+<p>Every individual who is referred to in a patient record in OpenMRS is stored in the system as a Person. These include Patients, any patient relative or caretaker, Providers, and Users.</p>
+
+<p>All Persons have these characteristics.</p>
+<h2 id='sub-resource-types'>Sub resource types</h2><h3 id='names'>Names</h3>
+<p>A person can have one or more names, one of which must be marked as the <strong>preferred</strong> name. The preferred name will be displayed in search results and patient screens.</p>
+<h3 id='addresses'>Addresses</h3>
+<p>A person may have zero or more contact addresses. You may configure the format of these addresses for your particular locale.</p>
+<h3 id='person-attributes'>Person Attributes</h3>
+<p>To support your local needs, you can define additional pieces of information about the people in your system, on top of those that are natively supported by OpenMRS. You can define the datatype of a Person Attribute, as well as any constraints on the possible values, using metadata. This metadata is called a Person Attribute Type.</p>
+
+<p>Person Attributes are suitable for storing other information. But historical values of person attributes are not retained. For example, you should use a person attribute to record a patient&#39;s contact telephone number. This information may change, but if it does so, the system need only store the most recent value, and need not retain previous values. It is not appropriate to use a person attribute to store something like the patient&#39;s height, which is recorded at a given point in time, but can be expected to change and should be tracked as it does so.</p>
+<h2 id='available-operations-for-person-type'>Available Operations for Person type</h2>
+<ol>
+<li><a href="#search-persons">Search Persons</a></li>
+<li><a href="#create-a-person">Create Persons</a></li>
+<li><a href="#update-a-person">Update Persons</a></li>
+<li><a href="#delete-a-person">Delete Persons</a></li>
+<li><a href="#list-person-name-subresource">List person names</a></li>
+<li><a href="#create-person-name-subresource">Create person name</a></li>
+<li><a href="#update-person-name-subresource">Update person name</a></li>
+<li><a href="#delete-person-name-subresource">Delete person name</a></li>
+<li><a href="#list-person-address-subresource">List person addresses</a></li>
+<li><a href="#create-person-address-subresource">Create person address</a></li>
+<li><a href="#create-person-address-subresource">Update person address</a></li>
+<li><a href="#create-person-address-subresource">Delete person address</a></li>
+<li><a href="#list-person-attribute-subresource">List person attributes</a></li>
+<li><a href="#create-person-attribute-subresource">Create person attribute</a></li>
+<li><a href="#update-person-name-subresource">Update person attribute</a></li>
+<li><a href="#delete-person-name-subresource">Delete person attribute</a></li>
+</ol>
+<h2 id='search-persons'>Search Persons</h2>
+<ul>
+<li><h3 id='search-persons-2'>Search Persons</h3>
+<p>Fetch all non-voided persons that match the search query parameter. Returns a 200 OK status with the Person response.</p>
+<h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><em>string</em></td>
+<td><em>search by name</em></td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person?q=john
+</code></pre>
+<ul>
+<li><h3 id='list-person-by-uuid'>List person by UUID</h3>
+<p>Retrieve a person by its UUID. Returns a <code>404 Not Found</code> status if person does not exist in the system. If the user is not logged in to perform this action, a <code>401 Unauthorized</code> status is returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid
+</code></pre><h2 id='create-a-person'>Create a person</h2>
+<ul>
+<li><p>To create a person you need to specify the below properties in the request. <code>401 Unauthorized</code> is returned if the request is not authenticated or if the authenticated user does not have appropriate permissions.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>names</em></td>
+<td><code>Array[] : names</code></td>
+<td>List of names</td>
+</tr>
+<tr>
+<td><em>gender</em></td>
+<td>String</td>
+<td>The patient&#39;s gender (&quot;M&quot; for male, &quot;F&quot; for female, or &quot;U&quot; for unknown)</td>
+</tr>
+<tr>
+<td><em>age</em></td>
+<td>Integer</td>
+<td>The estimated age in years. Used when birthdate is unknown.</td>
+</tr>
+<tr>
+<td><em>birthDate</em></td>
+<td>String</td>
+<td>Date of birth of a person</td>
+</tr>
+<tr>
+<td><em>birthDateEstimated</em></td>
+<td>Boolean</td>
+<td>True if the birthdate is estimated; false if birthdate is accurate.</td>
+</tr>
+<tr>
+<td><em>birthTime</em></td>
+<td>String</td>
+<td>The time of birth of the person</td>
+</tr>
+<tr>
+<td><em>dead</em></td>
+<td>Boolean</td>
+<td>True if the patient is dead.</td>
+</tr>
+<tr>
+<td><em>deathDate</em></td>
+<td>String</td>
+<td>Date of death of the person</td>
+</tr>
+<tr>
+<td><em>causeOfDeath</em></td>
+<td><code>Concept UUID</code></td>
+<td>Reason for the death of the person</td>
+</tr>
+<tr>
+<td><em>deathdateEstimated</em></td>
+<td>Boolean</td>
+<td><code>true</code> if deathDate is estimate; <code>false</code> if deathDate is accurate</td>
+</tr>
+<tr>
+<td><em>addresses</em></td>
+<td><code>Array[] : addresses</code></td>
+<td>The address details aggregated in an array</td>
+</tr>
+<tr>
+<td><em>attributes</em></td>
+<td><code>Array[] : attributes</code></td>
+<td>The attribute details aggregated in an array</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight plaintext"><code>POST /person
+{
+    "names": [
+        {
+        "givenName": "Mohit",
+        "familyName": "Kumar"
+        }
+    ],
+    "gender": "M",
+    "birthdate": "1997-09-02",
+    "addresses": [
+        {
+        "address1": "30, Vivekananda Layout, Munnekolal,Marathahalli",
+        "cityVillage": "Bengaluru",
+        "country": "India",
+        "postalCode": "560037"
+        }
+    ]
+}
+</code></pre><h2 id='update-a-person'>Update a person</h2>
+<ul>
+<li><p>Update a person. This method only modifies properties specified in the request. Returns a <code>404 Not found</code>.
+If not authenticated or authenticated user does not have sufficient privileges, <code>401 Unauthorized</code> status returned.</p>
+
+<p>An example of the request is as follows : </p></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /person/:target_person_uuid
+{
+    "gender": "M",
+    "birthdate": "1997-01-13",
+}
+</code></pre><h2 id='delete-a-person'>Delete a person</h2>
+<ul>
+<li><p>Delete or Void a target person. Returns a <code>404 Not Found</code> status if person not exists. IIf not authenticated or authenticated user does not have sufficient privileges, <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /person/:target_person_uuid?purge=true
+</code></pre><h2 id='list-person-name'>List person name</h2>
+<ul>
+<li>List all the person name subresource corresponding to a <code>target_person_uuid</code>. Returns <code>404 Not Found</code> status if the person does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/name
+</code></pre>
+<ul>
+<li>List the person name by it&#39;s <code>UUID</code> and corresponding to a <code>target_person_uuid</code>. Returns <code>404 Not Found</code> status if the person does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/name/:target_name_uuid
+</code></pre><h2 id='create-person-name-subresource'>Create person name subresource</h2>
+<ul>
+<li><p>To create a person name sub resource for a specific person resource you need to specify below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>givenName</em></td>
+<td><code>String</code></td>
+<td>name of the person</td>
+</tr>
+<tr>
+<td><em>middleName</em></td>
+<td><code>String</code></td>
+<td>middle name of the person</td>
+</tr>
+<tr>
+<td><em>familyName</em></td>
+<td><code>String</code></td>
+<td>family name/surname of the person</td>
+</tr>
+<tr>
+<td><em>familyName2</em></td>
+<td><code>String</code></td>
+<td>second family name/surname of the person</td>
+</tr>
+<tr>
+<td><em>preferred</em></td>
+<td><code>Boolean</code></td>
+<td>true if this is the person&#39;s preferred name. When a person has only one name, it should be marked as preferred; when a person has multiple names, only one name can be preferred.</td>
+</tr>
+<tr>
+<td><em>prefix</em></td>
+<td><code>String</code></td>
+<td>prefix for the name</td>
+</tr>
+<tr>
+<td><em>familyNamePrefix</em></td>
+<td><code>String</code></td>
+<td>prefix if any for the family name</td>
+</tr>
+<tr>
+<td><em>familyNameSuffix</em></td>
+<td><code>String</code></td>
+<td>Suffix if any for the family name</td>
+</tr>
+<tr>
+<td><em>degree</em></td>
+<td><code>String</code></td>
+<td>degree attained by the person</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/name
+{ 
+    "givenName": "Mohit",
+    "familyName": "Kumar",
+    "preferred": true,
+    "prefix": "Mr."
+}
+</code></pre><h2 id='update-person-name'>Update person name</h2>
+<ul>
+<li><p>To update a person name with given uuid value for a specific person resource you need to specify below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-3'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>givenName</em></td>
+<td><code>String</code></td>
+<td>name of the person</td>
+</tr>
+<tr>
+<td><em>middleName</em></td>
+<td><code>String</code></td>
+<td>middle name of the person</td>
+</tr>
+<tr>
+<td><em>familyName</em></td>
+<td><code>String</code></td>
+<td>family name/surname of the person</td>
+</tr>
+<tr>
+<td><em>familyName2</em></td>
+<td><code>String</code></td>
+<td>second family name/surname of the person</td>
+</tr>
+<tr>
+<td><em>preferred</em></td>
+<td><code>Boolean</code></td>
+<td>true if this is the person&#39;s preferred name. When a person has only one name, it should be marked as preferred; when a person has multiple names, only one name can be preferred.</td>
+</tr>
+<tr>
+<td><em>prefix</em></td>
+<td><code>String</code></td>
+<td>prefix for the name</td>
+</tr>
+<tr>
+<td><em>familyNamePrefix</em></td>
+<td><code>String</code></td>
+<td>prefix if any for the family name</td>
+</tr>
+<tr>
+<td><em>familyNameSuffix</em></td>
+<td><code>String</code></td>
+<td>Suffix if any for the family name</td>
+</tr>
+<tr>
+<td><em>degree</em></td>
+<td><code>String</code></td>
+<td>degree attained by the person</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/name
+{ 
+    "givenName": "Mohit",
+    "familyName": "Verma",
+    "preferred": true,
+    "prefix": "Dr."
+}
+</code></pre><h2 id='delete-a-person-name-sub-resource'>Delete a person name sub resource</h2>
+<ul>
+<li>Delete or void a target name sub resource. Returns a <code>404 Not Found</code> status if attribute not exists. 
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /person/:target_person_uuid/person/:target_name_uuid
+</code></pre><h2 id='list-person-address-subresource'>List person address subresource</h2>
+<ul>
+<li>List all the person addresses corresponding to a <code>target_person_uuid</code>. Returns a <code>404 Not Found</code> status if person address not exists. If user not logged in to perform this action, a <code>401 unauthorized</code> status returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/address
+</code></pre>
+<ul>
+<li>List all the person addresses by it&#39;s <code>target_address_uuid</code> and corresponding to a <code>target_person_uuid</code>. Returns a <code>404 Not Found</code> status if person address not exists. If user not logged in to perform this action, a <code>401 unauthorized</code> status returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/address/:target_address_uuid
+</code></pre><h2 id='create-person-address-subresource'>Create person address subresource</h2>
+<ul>
+<li><p>To create a person address sub resource for a specific person resource you need to specify below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes-4'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>preferred</em></td>
+<td><code>Boolean</code></td>
+<td>true if this is the person&#39;s preferred address. If a person has multiple addresses, only one can be preferred.</td>
+</tr>
+<tr>
+<td><em>address1</em></td>
+<td><code>String</code></td>
+<td>address of the person</td>
+</tr>
+<tr>
+<td><em>address2</em></td>
+<td><code>String</code></td>
+<td>second address of the person</td>
+</tr>
+<tr>
+<td><em>cityVillage</em></td>
+<td><code>String</code></td>
+<td>city/village of the person</td>
+</tr>
+<tr>
+<td><em>stateProvince</em></td>
+<td><code>String</code></td>
+<td>name of the state of the person</td>
+</tr>
+<tr>
+<td><em>country</em></td>
+<td><code>String</code></td>
+<td>country of the person</td>
+</tr>
+<tr>
+<td><em>postalCode</em></td>
+<td><code>String</code></td>
+<td>pin code of the person</td>
+</tr>
+<tr>
+<td><em>countyDistrict</em></td>
+<td><code>String</code></td>
+<td>county district of the person</td>
+</tr>
+<tr>
+<td><em>address3</em></td>
+<td><code>String</code></td>
+<td>third address of the person</td>
+</tr>
+<tr>
+<td><em>address4</em></td>
+<td><code>String</code></td>
+<td>fourth address of the person</td>
+</tr>
+<tr>
+<td><em>address5</em></td>
+<td><code>String</code></td>
+<td>fifth address of the person</td>
+</tr>
+<tr>
+<td><em>address6</em></td>
+<td><code>String</code></td>
+<td>sixth address of the person</td>
+</tr>
+<tr>
+<td><em>startDate</em></td>
+<td><code>String</code></td>
+<td>date when the person began living at this address</td>
+</tr>
+<tr>
+<td><em>endDate</em></td>
+<td><code>String</code></td>
+<td>date when the person stopped living at this address</td>
+</tr>
+<tr>
+<td><em>lattitude</em></td>
+<td><code>String</code></td>
+<td>lattitude of the address</td>
+</tr>
+<tr>
+<td><em>longitude</em></td>
+<td><code>String</code></td>
+<td>longitude of the address</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/address
+{ 
+    "address1": "30, Vivekananda Layout, Munnekolal,Marathahalli",
+    "cityVillage": "Bengaluru"
+    "stateProvince": "Karnataka",
+    "postalCode": "560037",
+    "lattitude": "28.65033",
+    "longitude": "77.304255"
+}
+</code></pre><h2 id='update-person-address-subresource'>Update person address subresource</h2>
+<ul>
+<li><p>To update a person address with given uuid value for a specific person resource you need to specify below properties in your request body.
+If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-5'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>preferred</em></td>
+<td><code>Boolean</code></td>
+<td>true if this is the person&#39;s preferred address. If a person has multiple addresses, only one can be preferred.</td>
+</tr>
+<tr>
+<td><em>address1</em></td>
+<td><code>String</code></td>
+<td>address of the person</td>
+</tr>
+<tr>
+<td><em>address2</em></td>
+<td><code>String</code></td>
+<td>second address of the person</td>
+</tr>
+<tr>
+<td><em>cityVillage</em></td>
+<td><code>String</code></td>
+<td>city/village of the person</td>
+</tr>
+<tr>
+<td><em>stateProvince</em></td>
+<td><code>String</code></td>
+<td>name of the state of the person</td>
+</tr>
+<tr>
+<td><em>country</em></td>
+<td><code>String</code></td>
+<td>country of the person</td>
+</tr>
+<tr>
+<td><em>postalCode</em></td>
+<td><code>String</code></td>
+<td>pin code of the person</td>
+</tr>
+<tr>
+<td><em>countyDistrict</em></td>
+<td><code>String</code></td>
+<td>county district of the person</td>
+</tr>
+<tr>
+<td><em>address3</em></td>
+<td><code>String</code></td>
+<td>third address of the person</td>
+</tr>
+<tr>
+<td><em>address4</em></td>
+<td><code>String</code></td>
+<td>fourth address of the person</td>
+</tr>
+<tr>
+<td><em>address5</em></td>
+<td><code>String</code></td>
+<td>fifth address of the person</td>
+</tr>
+<tr>
+<td><em>address6</em></td>
+<td><code>String</code></td>
+<td>sixth address of the person</td>
+</tr>
+<tr>
+<td><em>startDate</em></td>
+<td><code>String</code></td>
+<td>date when the person began living at this address</td>
+</tr>
+<tr>
+<td><em>endDate</em></td>
+<td><code>String</code></td>
+<td>date when the person stopped living at this address</td>
+</tr>
+<tr>
+<td><em>lattitude</em></td>
+<td><code>String</code></td>
+<td>lattitude of the address</td>
+</tr>
+<tr>
+<td><em>longitude</em></td>
+<td><code>String</code></td>
+<td>longitude of the address</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/address
+{ 
+    "address1": "30, Vivekananda Layout, Munnekolal,Marathahalli",
+    "cityVillage": "Bengaluru"
+    "stateProvince": "Karnataka",
+    "postalCode": "560037",
+    "lattitude": "28.65033",
+    "longitude": "77.304255"
+}
+</code></pre><h2 id='delete-a-person-address-sub-resource'>Delete a person address sub resource</h2>
+<ul>
+<li>Delete or void a target address sub resource. Returns <code>404 Not Found</code> status if the person does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /person/:target_person_uuid/person/:target_address_uuid
+</code></pre><h2 id='list-person-attribute-subresource'>List person attribute subresource</h2>
+<ul>
+<li>List all person attributes for a given person. Returns a <code>404 Not Found</code> if the person doesn&#39;t exist. If not authenticated or the authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> status is returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/attribute
+</code></pre>
+<ul>
+<li>List all the person attributes by it&#39;s <code>UUID</code> and corresponding to a <code>target_person_uuid</code>. Returns a <code>404 Not Found</code> status if person attribute not exists. If user not logged in to perform this action, a <code>401 unauthorized</code> status returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>GET /person/:target_person_uuid/name/:target_attribute_uuid
+</code></pre><h2 id='create-person-attribute-subresource'>Create person attribute subresource</h2>
+<ul>
+<li><p>To create a person attribute sub resource for a specific person resource you need to specify below properties in your request body.
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h4 id='attributes-6'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>UUID</code></td>
+<td>UUID of the attributeType</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>String</code></td>
+<td>value associated with the attribute</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/attribute
+{ 
+    "attributeType": "8d8718c2-c2cc-11de-8d13-0010c6dffd0f",
+    "value": "Birthplace",
+}
+</code></pre><h2 id='update-person-attribute-subresource'>Update person attribute subresource</h2>
+<ul>
+<li><p>To update a person attribute with given uuid value for a specific person resource you need to specify below properties in your request body.
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> status is returned.</p>
+<h3 id='attributes-7'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>attributeType</em></td>
+<td><code>UUID</code></td>
+<td>UUID of the attributeType</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>String</code></td>
+<td>value associated with the attribute</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST person/:target_person_uuid/attribute
+{ 
+    "attributeType": "8d8718c2-c2cc-11de-8d13-0010c6dffd0f",
+    "value": "Birthplace",
+}
+</code></pre><h2 id='delete-a-person-attribute-sub-resource'>Delete a person attribute sub resource</h2>
+<ul>
+<li>Delete or void a target attribute. Returns <code>404 Not Found</code> status if the person does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /person/:target_person_uuid/person/:target_attribute_uuid
+</code></pre>

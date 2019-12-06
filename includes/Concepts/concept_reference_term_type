@@ -1,0 +1,156 @@
+<h1 id='concept-reference-term'>Concept Reference Term</h1><h2 id='overview'>Overview</h2>
+<ul>
+<li>Concept reference terms represent terms within external vocabularies (typically standardized 
+terminologies like SNOMED, ICD, LOINC, etc.). OpenMRS concept can be mapped to these 
+reference terms through <a href="concept_mapping.md">concept mappings</a>. </li>
+</ul>
+<h2 id='available-operations'>Available operations.</h2>
+<ol>
+<li> <a href="#list-concept-reference-terms">List concept reference terms</a></li>
+<li> <a href="#create-a-concept-reference-term">Create a concept reference term</a></li>
+<li> <a href="#update-a-concept-reference-term">Update a concept reference term</a></li>
+<li> <a href="#delete-a-concept-reference-term">Delete a concept reference term</a></li>
+</ol>
+<h3 id='list-concept-reference-terms'>List concept reference terms</h3>
+<ul>
+<li><h4 id='list-all-concepts-reference-terms'>List all concepts reference terms.</h4>
+<p>Quickly filter concept reference term  with given query parameters.Returns a <code>404 Not Found</code> status if concept 
+reference term type not exists. If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h5 id='query-parameters'>Query Parameters</h5>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>codeOrName</em></td>
+<td><code>String</code></td>
+<td>Represents a name from a standard medical code</td>
+</tr>
+<tr>
+<td><em>source</em></td>
+<td><code>String</code></td>
+<td>A concept can have any number of mappings to any number of other vocabularies. Other vocabularies are called &quot;concept sources&quot; in OpenMRS (ie. LOINC, SNOMED, ICD-9, ICD10, RxNORM, etc), but the concept source can also be a custom (ie. org.openmrs.module.mdrtb, PIH, AMPATH, MVP, etc.). Every concept can define a string for its mapping in any &quot;concept source&quot; defined in the database</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>GET /conceptreferenceterm?
+  codeOrName=274663001
+</code></pre></li>
+<li><h4 id='query-concept-reference-term-by-uuid'>Query concept reference term by UUID.</h4>
+<p>Retrieve an concept reference term  by its UUID. Returns a <code>404 Not Found</code> status if concept reference term not 
+exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<pre class="highlight shell_session"><code>GET /conceptreferenceterm/:target_concept_reference_term_type_uuid
+</code></pre></li>
+</ul>
+<h3 id='create-a-concept-reference-term'>Create a concept reference term</h3>
+<ul>
+<li><p>To Create an concept reference term you need to specify below attributes in the request body.If you are not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>names</em></td>
+<td><code>String</code></td>
+<td>Name for the concept reference term</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>A concept datatype prescribes the structured format by which you desire the data to be represented. In simple terms, the datatype defines the type of data that the concept is intended to collect</td>
+</tr>
+<tr>
+<td><em>code</em></td>
+<td><code>String</code></td>
+<td>Represents a name from a standard medical code (required)</td>
+</tr>
+<tr>
+<td><em>conceptSource</em></td>
+<td><code>target_concept_source_UUID</code></td>
+<td>A concept can have any number of mappings to any number of other vocabularies. Other vocabularies are called &quot;concept sources&quot; in OpenMRS (ie. LOINC, SNOMED, ICD-9, ICD10, RxNORM, etc), but the concept source can also be a custom (ie. org.openmrs.module.mdrtb, PIH, AMPATH, MVP, etc.). Every concept can define a string for its mapping in any &quot;concept source&quot; defined in the database (required)</td>
+</tr>
+<tr>
+<td><em>version</em></td>
+<td><code>String</code></td>
+<td>A method to keep track of the number of updates applied to a specific concept reference term type</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptreferenceterm
+    {
+      "code": "274663001",
+      "conceptSource": "1ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "version": "1.0.0"
+    }
+</code></pre><h3 id='update-a-concept-reference-term'>Update a concept reference term</h3></li>
+<li><p>Update a target concept reference term with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if concept reference term not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='attributes-2'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>names</em></td>
+<td><code>String</code></td>
+<td>Name for the concept reference term</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>A concept datatype prescribes the structured format by which you desire the data to be represented. In simple terms, the datatype defines the type of data that the concept is intended to collect</td>
+</tr>
+<tr>
+<td><em>code</em></td>
+<td><code>String</code></td>
+<td>Represents a name from a standard medical code (required)</td>
+</tr>
+<tr>
+<td><em>conceptSource</em></td>
+<td><code>target_concept_source_UUID</code></td>
+<td>A concept can have any number of mappings to any number of other vocabularies. Other vocabularies are called &quot;concept sources&quot; in OpenMRS (ie. LOINC, SNOMED, ICD-9, ICD10, RxNORM, etc), but the concept source can also be a custom (ie. org.openmrs.module.mdrtb, PIH, AMPATH, MVP, etc.). Every concept can define a string for its mapping in any &quot;concept source&quot; defined in the database (required)</td>
+</tr>
+<tr>
+<td><em>version</em></td>
+<td><code>String</code></td>
+<td>A method to keep track of the number of updates applied to a specific concept reference term type</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /conceptreferenceterm/:target_concept_reference_term_type_uuid
+    {
+      "code": "274663001",
+      "conceptSource": "1ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "version": "1.0.1"
+    }
+</code></pre></li>
+</ul>
+<h3 id='delete-a-concept-reference-term'>Delete a concept reference term</h3>
+<ul>
+<li><p>Delete or retire a target concept reference term by its UUID. Returns a <code>404 Not Found</code> status if concept reference 
+term not exists.If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h4 id='query-parameters-2'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be retired unless purge = ‘true’</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    DELETE /conceptreferenceterm/:target_concept_reference_term_type_uuid?purge=true
+</code></pre></li>
+</ul>

@@ -1,0 +1,137 @@
+<h1 id='visits-type'>Visits Type</h1><h2 id='visits-type-overview'>Visits Type Overview</h2>
+<ul>
+<li><p>A Visit Type is a name and description of a kind of visit. </p></li>
+<li><p>Every visit has a type. You should create visit types that match how your health site classifies visits, such as 
+&quot;Outpatient,&quot; &quot;Hospitalization,&quot; &quot;Dental,&quot; &quot;Patient Education,&quot; or &quot;TB Clinic.&quot;.</p></li>
+<li><p>It is mandatory to set up at least one visit type.</p></li>
+<li><p>Visit types will be shown as dropdown options when creating or editing a patient in Registration. </p></li>
+<li><p>Visit types can be added via the OpenMRS admin screen(Administration &gt; Visits &gt; Manage Visit Types) or via sql scripts. </p></li>
+</ul>
+<h2 id='available-operations-for-visits-type'>Available operations for Visits Type</h2>
+<ol>
+<li><a href="#list-visits-types">List visits types</a></li>
+<li><a href="#create-a-visit-type">Create a visit type</a></li>
+<li><a href="#update-a-visit-type">Update a visit type</a></li>
+<li><a href="#delete-a-visit-type">Delete a visit type</a></li>
+</ol>
+<h2 id='list-visits-types'>List visits types</h2>
+<ul>
+<li><h3 id='list-all-non-retired-visits-types'>List all non-retired visits types.</h3>
+<p>Quickly filter visit types with a given search query.Returns a <code>404 Not Found</code> status if visit type not exists. 
+If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h5 id='query-parameters'>Query Parameters</h5>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Display Name of Visit Type.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /visittype?q="Search Query"
+</code></pre>
+<ul>
+<li><h3 id='list-visit-type-by-uuid'>List visit type by UUID.</h3>
+<p>Retrieve a visit type by its UUID. Returns a <code>404 Not Found</code> status if visit type not exists. If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /visittype/:target_visit_type_uuid
+</code></pre><h2 id='create-a-visit-type'>Create a visit type</h2>
+<ul>
+<li><p>To Create a visit type you need to specify below attributes in the request body.If you are not logged in to perform this action,
+a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the visit type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>Patient UUID</code></td>
+<td>Visit type resource UUID (Required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /visittype
+{
+    "name": "Name for the visit type",
+    "description": "Description for the visit type"
+}
+</code></pre><h2 id='update-a-visit-type'>Update a visit type</h2>
+<ul>
+<li><p>Update a target visit type with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if visit not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>uuid</em></td>
+<td><code>target_visit_type_uuid</code></td>
+<td>Target visit type resource UUID</td>
+</tr>
+</tbody></table>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the visit type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>Patient UUID</code></td>
+<td>Visit type resource UUID (Required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /type/:target_visit_type_uuid
+{
+    "name": "Modified name for the visit type",
+    "description": "Modified description for the visit type"
+}
+</code></pre><h2 id='delete-a-visit-type'>Delete a visit type</h2>
+<ul>
+<li><p>Delete or Retire a target visit type by its UUID. Returns a <code>404 Not Found</code> status if visit not exists.If user not logged 
+in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-3'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided/retired unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /visittype/:target_visit_type_uuid?purge=true
+</code></pre>

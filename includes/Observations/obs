@@ -1,0 +1,244 @@
+<h1 id='observations'>Observations</h1><h2 id='observations-overview'>Observations Overview</h2>
+<p>An Observation is one single piece of information that is recorded about a person at a moment in time.</p>
+
+<p>Every observation has a Concept as its question, and depending on the datatype of the concept, it has a value that is a number, date, text, Concept, etc.</p>
+
+<p>Most of the information you store in OpenMRS is in the form of Observations, and most Observations happen in an Encounter. When you enter a form in OpenMRS, typically one Encounter is created with anywhere between tens or hundreds of Observations.</p>
+
+<p>Note that an individual Observation is valid only at one moment in time, and it does not carry forward. You may query the system for the last observation for pregnancy status but this does not tell you whether or not the patient is pregnant at any point after the moment of that observation.</p>
+
+<p>Examples of observations include Serum Creatinine of 0.9mg/dL or Review of cardiopulmonary system is normal.</p>
+<h2 id='available-operations-for-observations'>Available operations for Observations.</h2>
+<ol>
+<li><a href="#list-observations">List observations</a></li>
+<li><a href="#create-an-observation">Create an observation</a></li>
+<li><a href="#update-an-observation">Update an observation</a></li>
+<li><a href="#delete-an-observation">Delete an observation</a></li>
+</ol>
+<h2 id='list-observations'>List observations</h2>
+<ul>
+<li><h3 id='list-all-observations'>List all observations.</h3>
+<p>Quickly filter observations with given query parameters. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>patient</em></td>
+<td><code>target_patient_uuid</code></td>
+<td>patient resource UUID</td>
+</tr>
+<tr>
+<td><em>concept</em></td>
+<td><code>target_concept_uuid</code></td>
+<td>concept resource UUID (this parameter to be used with patient)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /obs?patient=070f0120-0283-4858-885d-a20d967729cf"
+</code></pre>
+<ul>
+<li><h3 id='query-observations-by-uuid'>Query observations by UUID.</h3>
+<p>Retrieve an observation by its UUID.
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /obs/:target_observation_uuid
+</code></pre><h2 id='create-an-observation'>Create an observation</h2>
+<ul>
+<li><p>To Create an observation you need to specify below attributes in the request body. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>person</em></td>
+<td><code>Person UUID</code></td>
+<td>the Person this Obs is acting on.</td>
+</tr>
+<tr>
+<td><em>obsDateTime</em></td>
+<td><code>String</code></td>
+<td>The type of <code>obsDateTime</code> is an &quot;ISO 8601 timestamp&quot;</td>
+</tr>
+<tr>
+<td><em>concept</em></td>
+<td><code>Concept UUID</code></td>
+<td>the coded value/name given to an obs when it is made.</td>
+</tr>
+<tr>
+<td><em>location</em></td>
+<td><code>Location UUID</code></td>
+<td>the location this Obs took place (was taken).</td>
+</tr>
+<tr>
+<td><em>order</em></td>
+<td><code>String</code></td>
+<td>the order of an Obs.</td>
+</tr>
+<tr>
+<td><em>encounter</em></td>
+<td><code>Encounter UUID</code></td>
+<td>what obs are collected and grouped together into. An encounter is a visit.</td>
+</tr>
+<tr>
+<td><em>accessionNumber</em></td>
+<td><code>String</code></td>
+<td>An identifier used by the fulfiller (e.g., the lab) to identify the specimen or requisition used to produce this observation.</td>
+</tr>
+<tr>
+<td><em>groupMembers</em></td>
+<td><code>Array[]: Obs</code></td>
+<td>a list of Obs grouped under this Obs</td>
+</tr>
+<tr>
+<td><em>comment</em></td>
+<td><code>String</code></td>
+<td>An option free text comment about the observation.</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>String</code></td>
+<td>The value for the observation (e.g., the answer to a question or the result of a lab test).</td>
+</tr>
+<tr>
+<td><em>status</em></td>
+<td><code>String</code></td>
+<td><code>PRELIMINARY</code>, <code>FINAL</code>, <code>AMENDED</code></td>
+</tr>
+<tr>
+<td><em>interpretation</em></td>
+<td><code>String</code></td>
+<td><code>NORMAL</code>, <code>ABNORMAL</code>, <code>CRITICALLY_ABNORMAL</code>, <code>NEGATIVE</code>, <code>POSITIVE</code>,<code>CRITICALLY_LOW</code>,  <code>LOW</code>, <code>HIGH</code>, <code>CRITICALLY_HIGH</code>, <code>VERY_SUSCEPTIBLE</code>, <code>SUSCEPTIBLE</code>, <code>INTERMEDIATE</code>, <code>RESISTANT</code>, <code>SIGNIFICANT_CHANGE_DOWN</code>, <code>SIGNIFICANT_CHANGE_UP</code>, <code>OFF_SCALE_LOW</code>, <code>OFF_SCALE_HIGH</code></td>
+</tr>
+<tr>
+<td><em>voided</em></td>
+<td><code>Boolean</code></td>
+<td>true if the observation is voided</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /obs 
+{
+  "person": "070f0120-0283-4858-885d-a20d967729cf",
+  "concept": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "obsDatetime": "2019-11-14T07:37:31.000+0000",
+  "value": 70
+}
+</code></pre><h2 id='update-an-observation'>Update an observation</h2>
+<ul>
+<li><p>Update a target obs, this method only modifies properties in the request. Returns <code>404 Not Found</code> status if the observation does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>person</em></td>
+<td><code>Person UUID</code></td>
+<td>the Person this Obs is acting on.</td>
+</tr>
+<tr>
+<td><em>obsDateTime</em></td>
+<td><code>String</code></td>
+<td>The type of <code>obsDateTime</code> is an &quot;ISO 8601 timestamp&quot;</td>
+</tr>
+<tr>
+<td><em>concept</em></td>
+<td><code>Concept UUID</code></td>
+<td>the coded value/name given to an obs when it is made.</td>
+</tr>
+<tr>
+<td><em>location</em></td>
+<td><code>Location UUID</code></td>
+<td>the location this Obs took place (was taken).</td>
+</tr>
+<tr>
+<td><em>order</em></td>
+<td><code>String</code></td>
+<td>the order of an Obs.</td>
+</tr>
+<tr>
+<td><em>encounter</em></td>
+<td><code>Encounter UUID</code></td>
+<td>what obs are collected and grouped together into. An encounter is a visit.</td>
+</tr>
+<tr>
+<td><em>accessionNumber</em></td>
+<td><code>String</code></td>
+<td>An identifier used by the fulfiller (e.g., the lab) to identify the specimen or requisition used to produce this observation.</td>
+</tr>
+<tr>
+<td><em>groupMembers</em></td>
+<td><code>Array[]: Obs</code></td>
+<td>a list of Obs grouped under this Obs</td>
+</tr>
+<tr>
+<td><em>comment</em></td>
+<td><code>String</code></td>
+<td>An option free text comment about the observation.</td>
+</tr>
+<tr>
+<td><em>value</em></td>
+<td><code>String</code></td>
+<td>The value for the observation (e.g., the answer to a question or the result of a lab test).</td>
+</tr>
+<tr>
+<td><em>status</em></td>
+<td><code>String</code></td>
+<td><code>PRELIMINARY</code>, <code>FINAL</code>, <code>AMENDED</code></td>
+</tr>
+<tr>
+<td><em>interpretation</em></td>
+<td><code>String</code></td>
+<td><code>NORMAL</code>, <code>ABNORMAL</code>, <code>CRITICALLY_ABNORMAL</code>, <code>NEGATIVE</code>, <code>POSITIVE</code>,<code>CRITICALLY_LOW</code>,  <code>LOW</code>, <code>HIGH</code>, <code>CRITICALLY_HIGH</code>, <code>VERY_SUSCEPTIBLE</code>, <code>SUSCEPTIBLE</code>, <code>INTERMEDIATE</code>, <code>RESISTANT</code>, <code>SIGNIFICANT_CHANGE_DOWN</code>, <code>SIGNIFICANT_CHANGE_UP</code>, <code>OFF_SCALE_LOW</code>, <code>OFF_SCALE_HIGH</code></td>
+</tr>
+<tr>
+<td><em>voided</em></td>
+<td><code>Boolean</code></td>
+<td>true if the observation is voided</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /obs/:uuid_of_obs_to_be_updated
+{
+  "value": 71
+}
+</code></pre><h2 id='delete-an-observation'>Delete an observation</h2>
+<ul>
+<li><p>Delete or void a target observation. Returns <code>404 Not Found</code> status if the observation does not exist. 
+If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /obs/:target_obs_uuid?purge=true
+</code></pre>

@@ -1,0 +1,96 @@
+<h1 id='privilege'>Privilege</h1><h2 id='overview'>Overview</h2>
+<p>A <strong>Privilege</strong> is an authorization to perform a particular action in the system. The list of available privileges are defined by the core system and by add-on modules (for example, <strong>Delete Patients</strong> and <strong>Manage Encounter Types</strong>), but you need to configure which roles have which privileges while you are configuring your system.</p>
+<h2 id='available-operations'>Available operations.</h2>
+<ol>
+<li><a href="#list-privileges">List privilege</a></li>
+<li><a href="#create-a-privilege">Create a privilege</a></li>
+<li><a href="#update-a-privilege">Update a privilege</a></li>
+<li><a href="#delete-a-privilege">Delete a privilege</a></li>
+</ol>
+<h3 id='list-privilege'>List privilege</h3>
+<ul>
+<li><p>Fetch all privileges that match any specified parameters otherwise fetch all privileges. Returns a <code>200 OK</code> status with the privilege response. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<pre class="highlight shell_session"><code>GET /privilege
+</code></pre></li>
+<li><h4 id='get-privilege-by-uuid'>Get privilege by UUID</h4>
+<p>Retrieve a privilege by its UUID. Returns a <code>404 Not Found</code> status if the privilege not exists. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<pre class="highlight shell_session"><code>GET /privilege/:target_privilege_uuid
+</code></pre></li>
+</ul>
+<h3 id='create-a-privilege'>Create a privilege</h3>
+<ul>
+<li><p>To create a privilege you need to specify below attributes in the request body. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> status is returned.</p>
+<h4 id='attributes'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the privilege(Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description of the privilege(Required)</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /privilege
+    {
+        "name": "Delete Patients",
+        "description": "A privilege or permission to delete patients"
+    }
+</code></pre></li>
+</ul>
+<h3 id='update-a-privilege'>Update a privilege</h3>
+<ul>
+<li><p>Update a privilege with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code>
+status if the privilege deos not exists. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> status is returned. Attempting to update a privilege&#39;s name will fail with the error code <code>400 Bad Request</code>.</p>
+<h4 id='attributes-2'>Attributes</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description of the privilege (Required)</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    POST /privilege/:target_privilege_uuid
+    {
+      "description": "A user who can delete all the encounter types"
+    }
+</code></pre></li>
+</ul>
+<h3 id='delete-a-privilege'>Delete a privilege</h3>
+<ul>
+<li><p>Delete a privilege by its UUID. Returns a <code>404 Not Found</code> status if the privilege not
+exists. If not authenticated or authenticated user does not have sufficient privileges, a <code>401 Unauthorized</code> 
+status is returned.</p>
+<h4 id='query-parameters'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td><code>true</code> to delete the privilege from the system; if <code>false</code>, the request will have no effect</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell_session"><code>    DELETE /privilege/:target_privilege_uuid?purge=true
+</code></pre></li>
+</ul>

@@ -1,0 +1,53 @@
+<h1 id='authentication'>Authentication</h1>
+<ul>
+<li><p>Almost every API endpoint(other than the <code>/session</code> endpoint) in  OpenMRS API requires authentication 
+in order to interact.</p></li>
+<li><p>Currently, only BASIC authentication is supported. Along with the HTTP request, a request header of 
+<code>Authorization: Basic &lt;base64 of username:password&gt;</code> needs to be sent.</p></li>
+<li><p>Alternatively, a session token can be used to interact with the API endpoints.</p></li>
+</ul>
+<h2 id='retrieve-session-token'>Retrieve session token</h2>
+<p>The session token is retrieved using Basic authentication on the <code>/session</code> endpoint. The response will 
+include a <code>JSESSIONID</code> in the header. This session ID is also included in the response objec</p>
+<pre class="highlight shell_session"><code>GET /openmrs/ws/rest/v1/session 
+  -H 'Authorization: Basic Auth &lt;base64 encoded username:password'
+
+HTTP/1.1 200 OK
+Set-Cookie: JSESSIONID=FB0629C001449CE14DF1078ACDDBA858; Path=/openmrs; HttpOnly
+{
+    "authenticated": true,
+    "locale": "en_GB",
+    "sessionId": "FB0629C001449CE14DF1078ACDDBA858",
+    "user": {
+        "systemId": "admin",
+    }
+}
+</code></pre>
+<p>The <code>sessionId</code> token should be passed with all subsequent calls as a cookie named <code>JSESSIONID</code>.</p>
+<h2 id='logout-user-end-session'>Logout User/End session</h2><pre class="highlight shell_session"><code>DELETE /openmrs/ws/rest/v1/session -H 'Accept: application/json'
+-H 'Authorization: Basic Auth' (required to indetify the user)
+</code></pre><h2 id='changing-password'>Changing Password</h2>
+<p><b>Since version 2.17 of the webservices.rest module:</b></p>
+
+<ul>
+<li>An administrator (with the <code>EDIT_USER_PASSWORDS</code> privilege) can change the password for other users by 
+posting a new password to <code>/password/:target_user_uuid</code>.</li>
+</ul>
+<pre class="highlight shell_session"><code>POST /openmrs/ws/rest/v1/password/:target_user_uuid 
+{
+  "newPassword" : "newPassword"
+}
+</code></pre>
+<ul>
+<li>After authenticating user can change their own password, by posting to <code>/password</code></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /openmrs/ws/rest/v1/password 
+{
+  "oldPassword" : "oldPassword",
+  "newPassword" : "newPassword"
+}
+</code></pre><h2 id='getting-all-location-without-authentication'>Getting all location without authentication</h2>
+<p>While fetching individual locations requires authentication, you can get a list of available locations by passing 
+the special <code>tag</code> &quot;Login Location&quot; as a query parameter.</p>
+<pre class="highlight shell_session"><code>GET /openmrs/ws/rest/v1/location?tag=Login+Location' 
+</code></pre>

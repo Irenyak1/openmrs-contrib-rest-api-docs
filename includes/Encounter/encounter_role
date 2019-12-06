@@ -1,0 +1,122 @@
+<h1 id='encounter-role'>Encounter Role</h1><h2 id='encounter-role-overview'>Encounter Role Overview</h2>
+<ul>
+<li>An Encounter role is specific to the <a href="encounter.md">encounter</a>. While these could match up to existing organizational roles (e.g., “Nurse”), 
+they don’t have to (e.g., “Lead Surgeon”).</li>
+</ul>
+<h2 id='available-operation-for-encounter-roles'>Available operation for Encounter Roles</h2>
+<ol>
+<li><a href="#list-encounter-roles">List encounter roles</a></li>
+<li><a href="#create-a-encounter-role">Create an encounter role</a></li>
+<li><a href="#update-a-encounters-role">Update an encounter role</a></li>
+<li><a href="#delete-a-encounters-role">Delete an encounter role</a></li>
+</ol>
+<h2 id='list-encounter-roles'>List encounter roles</h2>
+<ul>
+<li><h3 id='list-all-non-voided-encounter-roles'>List all non-voided encounter roles.</h3>
+<p>Quickly filter encounter roles with given query parameters.Returns a <code>404 Not Found</code> status if encounter roles not exists. 
+ If user not logged in to perform this action,a <code>401 Unauthorized</code> status returned.</p>
+<h5 id='query-parameters'>Query Parameters</h5>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Query to filter encounter role by its name</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /encounterrole?
+    q=Clinician
+    ```
+
+* ### Get encounter role by UUID.
+
+    Retrieve an encounter role by its UUID. Returns a `404 Not Found` status if encounter role not exists. If user not logged 
+    in to perform this action, a `401 Unauthorized` status returned.
+
+```console
+GET /encounter/:target_encounter_role_uuid
+</code></pre><h2 id='create-an-encounter-role'>Create an encounter role</h2>
+<ul>
+<li><p>To Create an encounter role you need to specify below attributes in the request body. If you are not logged in to perform 
+this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the encounter role (required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td>`String</td>
+<td>Description for the encounter role (required)</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /encounterrole
+{
+    "name": "Clinician",
+    "description": "A provider assisting the Lead Surgeon."
+}
+</code></pre><h2 id='update-an-encounter-role'>Update an encounter role</h2>
+<ul>
+<li><p>Update a target encounter role with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code> 
+status if encounter role not exists. If user not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name for the encounter role</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td>`String</td>
+<td>Description for the encounter role</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /encounterrole/:target_encounter_role_uuid
+{
+    "name": "Assisting Surgeon"",
+    "description": "A surgeon who assisted the Lead Surgeon"
+}
+</code></pre><h2 id='delete-an-encounter-role'>Delete an encounter role</h2>
+<ul>
+<li><p>Delete or Void a target encounter role by its UUID. Returns a <code>404 Not Found</code> status if encounter role not exists.If user 
+not logged in to perform this action, a <code>401 Unauthorized</code> status returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be voided unless purge = ‘true’</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /encounterrole/:target_encounter_role_uuid?purge=true
+</code></pre>

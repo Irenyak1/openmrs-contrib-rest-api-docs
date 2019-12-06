@@ -1,0 +1,191 @@
+<h1 id='provider-attribute-type'>Provider Attribute Type</h1><h2 id='provider-attribute-overview'>Provider Attribute Overview</h2>
+<ul>
+<li>If you wish to record extra information about providers, you can create Provider Attributes and assign them to Provider Types.</li>
+</ul>
+<h2 id='available-operations-for-provider-attribute-type'>Available operations for Provider Attribute type.</h2>
+<ol>
+<li><a href="#list-provider-attribute-types">List provider attribute types</a></li>
+<li><a href="#create-a-provider-attribute-type">Create a provider attribute type</a></li>
+<li><a href="#update-a-provider-attribute-type">Update a provider attribute type</a></li>
+<li><a href="#delete-a-provider-attribute-type">Delete a provider attribute type</a></li>
+</ol>
+<h2 id='list-provider-attribute-types'>List provider attribute types</h2>
+<ul>
+<li><h3 id='list-all-non-retired-provider-attribute-types'>List all non-retired provider attribute types.</h3>
+<p>Quickly filter provider attribute types with a given search query. Returns a <code>404 Not Found</code> status if the provider attribute type not exists.
+If user not authenticated or the authenticated user does not have appropriate permissions, a 401 Unauthorized status is returned.</p>
+<h4 id='query-parameters'>Query Parameters</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>q</em></td>
+<td><code>Search Query</code></td>
+<td>Display Name of provider attribute type.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /providerattributetype?q="Search Query"
+</code></pre>
+<ul>
+<li><h3 id='list-provider-attribute-type-by-uuid'>List provider attribute type by UUID.</h3>
+<p>Retrieve a provider attribute type by its UUID. Returns a <code>404 Not Found</code> status if the provider attribute type not exists. 
+If user not authenticated or the authenticated user does not have appropriate permissions, a 401 Unauthorized status is returned.</p></li>
+</ul>
+<pre class="highlight shell_session"><code>GET /providerattributetype/:target_provider_attribute_type_uuid
+</code></pre><h2 id='create-a-provider-attribute-type'>Create a provider attribute type</h2>
+<ul>
+<li><p>To Create a provider attribute type you need to specify below attributes in the request body. If user not authenticated or 
+the authenticated user does not have appropriate permissions, a 401 Unauthorized status is returned.</p>
+<h3 id='attributes'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the provider attribute type (Required)</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description (Required)</td>
+</tr>
+<tr>
+<td><em>datatypeClassname</em></td>
+<td><code>CustomDataType Resource</code></td>
+<td>Data type for the attribute type resource. OpenMRS provides <strong>Custom data type resource</strong> which gives flexibility to select the data type accordingly (Required)</td>
+</tr>
+<tr>
+<td><em>minOccurs</em></td>
+<td><code>Number</code></td>
+<td>Minimum number of times this value can be specified for a single provider. Use <code>0</code> or <code>1</code> as the default value (Required)</td>
+</tr>
+<tr>
+<td><em>maxOccurs</em></td>
+<td><code>Number</code></td>
+<td>Maximum number of times this value can be specified for a single provider (e.g., use 1 to prevent an attribute from being added to a provider multiple times)</td>
+</tr>
+<tr>
+<td><em>preferredHandlerClassname</em></td>
+<td><code>Handler</code></td>
+<td>Specifies the Java class to be used when handling this provider attribute type. The java class must implement [<code>CustomDataTypeHandler</code>(https://docs.openmrs.org/doc/org/openmrs/customdatatype/CustomDatatypeHandler.html). If not specified, the system will try to choose the best handler for the chosen datatype.</td>
+</tr>
+<tr>
+<td><em>datatypeConfig</em></td>
+<td><code>String</code></td>
+<td>Provides ability to define custom data types configuration for openMRS</td>
+</tr>
+<tr>
+<td><em>handlerConfig</em></td>
+<td><code>String</code></td>
+<td>Allow handler to be used for more than one attribute type. The actual configuration depends on the needs of the specified handler. For example, a &quot;Pre-defined List&quot; handler could be made to implement a simple selection list and this configuration would tell the handler the possible choices in the list for this specific attribute type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /providerattributetype
+{
+  "name": "Provider Location",
+  "description": "This attribute type will record the loication of the provider",
+  "datatypeClassname": "org.openmrs.customdatatype.datatype.LongFreeTextDatatype",
+  "minOccurs": 0,
+  "maxOccurs": 1,
+  "datatypeConfig": "default",
+  "preferredHandlerClassname": "org.openmrs.web.attribute.handler.LongFreeTextTextareaHandler",
+  "handlerConfig": "dafault"
+}
+</code></pre><h2 id='update-a-provider-attribute-type'>Update a provider attribute type</h2>
+<ul>
+<li><p>Update a target provider attribute type with given UUID, this method only modifies properties in the request. Returns a <code>404 Not Found</code>
+status if the provider attribute not exists. If user not authenticated or the authenticated user does not have appropriate permissions, 
+a 401 Unauthorized status is returned.</p>
+<h3 id='attributes-2'>Attributes</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>name</em></td>
+<td><code>String</code></td>
+<td>Name of the provider attribute type</td>
+</tr>
+<tr>
+<td><em>description</em></td>
+<td><code>String</code></td>
+<td>Description (Required)</td>
+</tr>
+<tr>
+<td><em>datatypeClassname</em></td>
+<td><code>CustomDataType Resource</code></td>
+<td>Data type for the attribute type resource. OpenMRS provides <strong>Custom data type resource</strong> which gives flexibility to select the data type accordingly (Required)</td>
+</tr>
+<tr>
+<td><em>minOccurs</em></td>
+<td><code>Number</code></td>
+<td>Minimum number of times this value can be specified for a single provider. Use <code>0</code> or <code>1</code> as the default value (Required)</td>
+</tr>
+<tr>
+<td><em>maxOccurs</em></td>
+<td><code>Number</code></td>
+<td>Maximum number of times this value can be specified for a single provider (e.g., use 1 to prevent an attribute from being added to a provider multiple times)</td>
+</tr>
+<tr>
+<td><em>preferredHandlerClassname</em></td>
+<td><code>Handler</code></td>
+<td>Specifies the Java class to be used when handling this provider attribute type. The java class must implement [<code>CustomDataTypeHandler</code>(https://docs.openmrs.org/doc/org/openmrs/customdatatype/CustomDatatypeHandler.html). If not specified, the system will try to choose the best handler for the chosen datatype.</td>
+</tr>
+<tr>
+<td><em>datatypeConfig</em></td>
+<td><code>String</code></td>
+<td>Provides ability to define custom data types configuration for openMRS</td>
+</tr>
+<tr>
+<td><em>handlerConfig</em></td>
+<td><code>String</code></td>
+<td>Allow handler to be used for more than one attribute type. The actual configuration depends on the needs of the specified handler. For example, a &quot;Pre-defined List&quot; handler could be made to implement a simple selection list and this configuration would tell the handler the possible choices in the list for this specific attribute type</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>POST /providerattributetype/:target_provider_attribute_type_uuid
+{
+  "name": "Provider Location",
+  "description": "This attribute type will record the loication of the provider",
+  "datatypeClassname": "org.openmrs.customdatatype.datatype.LongFreeTextDatatype",
+  "minOccurs": 0,
+  "maxOccurs": 2,
+  "datatypeConfig": "default",
+  "preferredHandlerClassname": "org.openmrs.web.attribute.handler.LongFreeTextTextareaHandler",
+  "handlerConfig": "dafault"
+}
+</code></pre><h2 id='delete-a-provider-attribute-type'>Delete a provider attribute type</h2>
+<ul>
+<li><p>Delete or Retire a provider attribute type by its UUID. Returns a <code>404 Not Found</code> status if the provider attribute type not
+exists. If user not authenticated or the authenticated user does not have appropriate permissions, a 401 Unauthorized status is returned.</p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>purge</em></td>
+<td><code>Boolean</code></td>
+<td>The resource will be retired unless purge = ‘true’.Purging will attempt to irreversibly remove the attribute type from the system. Attribute types that have been used (i.e., are referenced from existing data) cannot be purged.</td>
+</tr>
+</tbody></table></li>
+</ul>
+<pre class="highlight shell_session"><code>DELETE /providerattributetype/:target_provider_attribute_type_uuid?purge=true
+</code></pre>
